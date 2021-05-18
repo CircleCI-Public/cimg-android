@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+repository=android
+parent=base
+variants=()

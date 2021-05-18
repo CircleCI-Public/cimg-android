@@ -1,0 +1,40 @@
+version: 2.1
+
+orbs:
+  sonar: hubci/sonar@1.0
+
+workflows:
+  main:
+    jobs:
+      - build:
+          context: cimg-publishing
+
+jobs:
+  build:
+    docker:
+      - image: cibuilds/docker:19.03
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: "Build Docker Images"
+          command: |
+            ./build-images.sh
+            echo 'export DOCKER_PASS=$DOCKER_TOKEN' >> $BASH_ENV
+      - deploy:
+          name: "Publish Docker Images (main branch only)"
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "main" ]; then
+              
+              echo $DOCKER_TOKEN | docker login -u $DOCKER_USER --password-stdin
+              
+              # an else block will be added in the future for a staging release
+              if git log -1 --pretty=%s | grep "\[release\]"; then
+                echo "Publishing cimg/android to Docker Hub production."
+                docker push cimg/android
+              else
+                echo "Skipping publishing."
+              fi
+      - sonar/update-readme:
+          image: cimg/android
+          file: "./README.md"
