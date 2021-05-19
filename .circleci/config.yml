@@ -35,6 +35,4 @@ jobs:
               else
                 echo "Skipping publishing."
               fi
-      - sonar/update-readme:
-          image: cimg/android
-          file: "./README.md"
+            fi

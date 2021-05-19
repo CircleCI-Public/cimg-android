@@ -1,0 +1,85 @@
+# vim:set ft=dockerfile:
+
+FROM cimg/base:2021.04
+
+LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
+
+
+
+# I may want to separate this into a variant to save space
+RUN sudo apt-get update && sudo apt-get install -y openjdk-8-jdk openjdk-11-jdk
+
+# install maven
+# install gradle
+# install ant
+
+# skipping kvm as it won't be available in the Docker executor
+
+RUN sudo apt-get install -y ant
+
+ENV M2_HOME /usr/local/apache-maven
+ENV MAVEN_OPTS -Xmx2048m
+ENV PATH $M2_HOME/bin:$PATH
+RUN MAVEN_VERSION=3.6.3 && \
+    curl -sSL -o /tmp/maven.tar.gz http://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
+    sudo tar -xz -C /usr/local -f /tmp/maven.tar.gz && \
+    sudo ln -sf /usr/local/apache-maven-${MAVEN_VERSION} /usr/local/apache-maven && \
+    rm -rf /tmp/maven.tar.gz && \
+	mkdir -p /home/circleci/.m2
+
+ENV PATH $PATH:/usr/local/gradle-${GRADLE_VERSION}/bin
+RUN GRADLE_VERSION=6.8.3 && \
+    URL=https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip && \
+    curl -sSL -o /tmp/gradle.zip $URL && \
+    sudo unzip -d /usr/local /tmp/gradle.zip && \
+    rm -rf /tmp/gradle.zip
+
+# Install Android SDK Tools
+ENV ANDROID_HOME "/home/circleci/android-sdk"
+ENV ANDROID_SDK_ROOT $ANDROID_HOME
+ENV CMDLINE_TOOLS_ROOT "${ANDROID_HOME}/cmdline-tools/latest/bin"
+ENV ADB_INSTALL_TIMEOUT 120
+ENV PATH "${ANDROID_HOME}/emulator:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/platform-tools/bin:${PATH}"
+RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip" && \
+	mkdir -p ${ANDROID_HOME}/cmdline-tools && \
+	mkdir ${ANDROID_HOME}/platforms && \
+	mkdir ${ANDROID_HOME}/ndk && \
+	wget -O /tmp/cmdline-tools.zip -t 5 "${SDK_TOOLS_URL}" && \
+	unzip -q /tmp/cmdline-tools.zip -d ${ANDROID_HOME}/cmdline-tools && \
+	rm /tmp/cmdline-tools.zip && \
+	mv ${ANDROID_HOME}/cmdline-tools/cmdline-tools ${ANDROID_HOME}/cmdline-tools/latest
+
+# CHeck that these envars exists in a real CI build
+#echo "export ANDROID_HOME=${ANDROID_HOME}" >> ${CIRCLECI_HOME}/.circlerc
+#echo "export ANDROID_SDK_ROOT=${ANDROID_HOME}" >> ${CIRCLECI_HOME}/.circlerc
+#echo "export ADB_INSTALL_TIMEOUT=120" >> ${CIRCLECI_HOME}/.circlerc
+#echo 'export PATH=${ANDROID_HOME}/emulator:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/platform-tools/bin:$PATH' >> ${CIRCLECI_HOME}/.circlerc
+
+#RUN yes | ${CMDLINE_TOOLS_ROOT}/sdkmanager --licenses && yes | ${CMDLINE_TOOLS_ROOT}/sdkmanager --update
+
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "tools" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platform-tools" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;30.0.3"
+
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-S"
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-30"
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-29"
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-28"
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-27"
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-26"
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-25"
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-24"
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-23"
+
+# ndk stuff
+ENV ANDROID_NDK_HOME "/opt/android/sdk/ndk/${ndk_version}"
+ENV ANDROID_NDK_ROOT ANDROID_NDK_HOME
+ENV PATH "${ANDROID_NDK_HOME}:${PATH}"
+RUN ndk_version="21.4.7075529" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "ndk;${ndk_version}" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "cmake;3.6.4111459"
+
+# install extras
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;android;m2repository" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;m2repository" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;google_play_services"
