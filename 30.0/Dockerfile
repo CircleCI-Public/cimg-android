@@ -9,10 +9,6 @@ LABEL maintainer="Community & Partner Engineering Team <community-partner@circle
 # I may want to separate this into a variant to save space
 RUN sudo apt-get update && sudo apt-get install -y openjdk-8-jdk openjdk-11-jdk
 
-# install maven
-# install gradle
-# install ant
-
 # skipping kvm as it won't be available in the Docker executor
 
 RUN sudo apt-get install -y ant
@@ -75,6 +71,11 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-23"
 ENV ANDROID_NDK_HOME "/opt/android/sdk/ndk/${ndk_version}"
 ENV ANDROID_NDK_ROOT ANDROID_NDK_HOME
 ENV PATH "${ANDROID_NDK_HOME}:${PATH}"
+# stable
+RUN ndk_version="22.1.7171670" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "ndk;${ndk_version}" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "cmake;3.6.4111459"
+	# lts
 RUN ndk_version="21.4.7075529" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "ndk;${ndk_version}" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "cmake;3.6.4111459"
