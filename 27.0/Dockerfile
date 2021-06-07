@@ -46,10 +46,10 @@ RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-lin
 	mv ${ANDROID_HOME}/cmdline-tools/cmdline-tools ${ANDROID_HOME}/cmdline-tools/latest
 
 # CHeck that these envars exists in a real CI build
-#echo "export ANDROID_HOME=${ANDROID_HOME}" >> ${CIRCLECI_HOME}/.circlerc
-#echo "export ANDROID_SDK_ROOT=${ANDROID_HOME}" >> ${CIRCLECI_HOME}/.circlerc
-#echo "export ADB_INSTALL_TIMEOUT=120" >> ${CIRCLECI_HOME}/.circlerc
-#echo 'export PATH=${ANDROID_HOME}/emulator:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/platform-tools/bin:$PATH' >> ${CIRCLECI_HOME}/.circlerc
+#echo "export ANDROID_HOME=${ANDROID_HOME}" >> /home/circleci/.circlerc
+#echo "export ANDROID_SDK_ROOT=${ANDROID_HOME}" >> /home/circleci/.circlerc
+#echo "export ADB_INSTALL_TIMEOUT=120" >> /home/circleci/.circlerc
+#echo 'export PATH=${ANDROID_HOME}/emulator:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/platform-tools/bin:$PATH' >> /home/circleci/.circlerc
 
 #RUN yes | ${CMDLINE_TOOLS_ROOT}/sdkmanager --licenses && yes | ${CMDLINE_TOOLS_ROOT}/sdkmanager --update
 
@@ -84,3 +84,12 @@ RUN ndk_version="21.4.7075529" && \
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;android;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;google_play_services"
+
+#echo 'export PATH=/opt/google/google-cloud-sdk/bin:$PATH' >> /home/circleci/.circlerc && \
+
+RUN VERSION=343.0.0-0 && \
+	curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - && \
+	sudo add-apt-repository "deb https://packages.cloud.google.com/apt cloud-sdk main" && \
+	sudo apt-get update && sudo apt-get install -y google-cloud-sdk=${VERSION} && \
+	sudo gcloud config set --installation component_manager/disable_update_check true && \
+	sudo gcloud config set disable_usage_reporting false
