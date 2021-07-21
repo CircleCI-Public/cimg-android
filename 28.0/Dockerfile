@@ -57,7 +57,7 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "tools" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platform-tools" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;30.0.3"
 
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-S"
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-31"
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-30"
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-29"
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-28"
@@ -68,7 +68,6 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-24"
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-23"
 
 # ndk stuff
-ENV ANDROID_NDK_HOME "/opt/android/sdk/ndk/${ndk_version}"
 ENV ANDROID_NDK_ROOT ANDROID_NDK_HOME
 ENV PATH "${ANDROID_NDK_HOME}:${PATH}"
 # stable
@@ -79,6 +78,7 @@ RUN ndk_version="22.1.7171670" && \
 RUN ndk_version="21.4.7075529" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "ndk;${ndk_version}" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "cmake;3.6.4111459"
+ENV ANDROID_NDK_HOME "/home/circleci/android-sdk/ndk/22.1.7171670"
 
 # install extras
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;android;m2repository" && \
