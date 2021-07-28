@@ -1,8 +1,8 @@
 <div align="center">
 	<p>
-		<img alt="CircleCI Logo" src="https://raw.github.com/CircleCI-Public/cimg-go/master/img/circle-circleci.svg?sanitize=true" width="75" />
-		<img alt="Docker Logo" src="https://raw.github.com/CircleCI-Public/cimg-go/master/img/circle-docker.svg?sanitize=true" width="75" />
-		<img alt="Android Logo" src="https://raw.github.com/CircleCI-Public/cimg-go/master/img/circle-android.svg?sanitize=true" width="75" />
+		<img alt="CircleCI Logo" src="https://raw.github.com/CircleCI-Public/cimg-go/main/img/circle-circleci.svg?sanitize=true" width="75" />
+		<img alt="Docker Logo" src="https://raw.github.com/CircleCI-Public/cimg-go/main/img/circle-docker.svg?sanitize=true" width="75" />
+		<img alt="Android Logo" src="https://raw.github.com/CircleCI-Public/cimg-go/main/img/circle-android.svg?sanitize=true" width="75" />
 	</p>
 	<h1>CircleCI Convenience Images => Android</h1>
 	<h3>A Continuous Integration focused Android Docker image built to run on CircleCI</h3>
@@ -196,7 +196,7 @@ All that would need to be done after that is:
 - review the PR
 - merge the PR
 
-The master branch build will then publish a release.
+The main branch build will then publish a release.
 
 ### Incorporating Changes
 
