@@ -8,7 +8,7 @@ LABEL maintainer="Community & Partner Engineering Team <community-partner@circle
 RUN sudo apt-get update && sudo apt-get install -y \
 		ant \
 		openjdk-8-jdk \
-		openjdk-11-jdk
+		openjdk-11-jdk \
 	&& \
 	sudo rm -rf /var/lib/apt/lists/*
 
