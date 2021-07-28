@@ -47,17 +47,17 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "tools" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platform-tools" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;30.0.3"
 
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-31"
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-30"
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-29"
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-28"
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-27"
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-26"
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-25"
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-24"
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-23"
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-31" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-30" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-29" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-28" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-27" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-26" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-25" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-24" && \
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-23"
 
-# install extras
+# Install some useful packages
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;android;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;google_play_services"
