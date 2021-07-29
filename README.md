@@ -1,8 +1,8 @@
 <div align="center">
 	<p>
-		<img alt="CircleCI Logo" src="https://raw.github.com/CircleCI-Public/cimg-go/main/img/circle-circleci.svg?sanitize=true" width="75" />
-		<img alt="Docker Logo" src="https://raw.github.com/CircleCI-Public/cimg-go/main/img/circle-docker.svg?sanitize=true" width="75" />
-		<img alt="Android Logo" src="https://raw.github.com/CircleCI-Public/cimg-go/main/img/circle-android.svg?sanitize=true" width="75" />
+		<img alt="CircleCI Logo" src="https://raw.github.com/CircleCI-Public/cimg-android/main/img/circle-circleci.svg?sanitize=true" width="75" />
+		<img alt="Docker Logo" src="https://raw.github.com/CircleCI-Public/cimg-android/main/img/circle-docker.svg?sanitize=true" width="75" />
+		<img alt="Android Logo" src="https://raw.github.com/CircleCI-Public/cimg-android/main/img/circle-android.svg?sanitize=true" width="75" />
 	</p>
 	<h1>CircleCI Convenience Images => Android</h1>
 	<h3>A Continuous Integration focused Android Docker image built to run on CircleCI</h3>
@@ -14,8 +14,9 @@
 
 ***This image is designed to supercede the legacy CircleCI Android image, `circleci/android`.***
 
-`cimg/Android` is a Docker image created by CircleCI with continuous integration builds in mind.
-Each tag contains a complete Go version and toolchain, the testing wrapper `gotestsum`, and any binaries and tools that are required for builds to complete successfully in a CircleCI environment.
+`cimg/android` is a Docker image created by CircleCI with continuous integration builds in mind.
+Each tag contains an Android environment and toolchain.
+Including several API SDKs, command line tools, build tools, Ant, Gradle, Google Cloud SDK, and more.
 
 
 ## Table of Contents
@@ -37,48 +38,64 @@ For example:
 jobs:
   build:
     docker:
-      - image: cimg/go:1.16
+      - image: cimg/android:2021.08-1
     steps:
       - checkout
-      - run: go version
+      - run: ./gradlew androidDependencies
+      - run: ./gradlew lint test
 ```
 
-In the above example, the CircleCI Go Docker image is used for the primary container.
-More specifically, the tag `1.13` is used meaning the version of Go will be Go v1.13.
-You can now use Go within the steps for this job.
+In the above example, the CircleCI Android Docker image is used for the primary container.
+More specifically, the tag `2021.08-1` is used meaning the August 2021 snapshot of the image is used.
+You can now build and test Android projects within the steps for this job.
 
 
 ## How This Image Works
 
-This image contains the Go programming language and its complete toolchain.
-This includes support for Go modules, the official Go Proxy Server, etc.
+This image contains the Android SDK and CLI tools.
 
 ### Variants
 
 Variant images typically contain the same base software, but with a few additional modifications.
 
-#### Node.js
+#### NDK - Native Development Kit
 
-The Node.js variant is the same Go image but with Node.js also installed.
-The Node.js variant will be used by appending `-node` to the end of an existing `cimg/go` tag.
+The NDK variant is the same Android image but with the Android NDK installed.
+Specifically a stable and LTS version.
+The NDK variant can be used by appending `-ndk` to the end of an existing `cimg/android` tag.
 
 ```yaml
 jobs:
   build:
     docker:
-      - image: cimg/go:1.13-node
+      - image: cimg/android:2021.08-1-ndk
     steps:
       - checkout
-      - run: go version
+```
+
+
+#### Node.js
+
+The Node.js variant is the same Android image but with Node.js also installed.
+The Node.js variant will be used by appending `-node` to the end of an existing `cimg/android` tag.
+
+```yaml
+jobs:
+  build:
+    docker:
+      - image: cimg/android:2021.08-1-node
+    steps:
+      - checkout
       - run: node --version
 ```
 
 #### Browsers
 
-The browsers variant is the same Go image but with Node.js, Java, Selenium, and browser dependencies pre-installed via apt.
-The browsers variant can be used by appending `-browser` to the end of an existing `cimg/go` tag.
+The browsers variant is the same Android image but with Node.js, Java, Selenium, and browser dependencies pre-installed via apt.
+The browsers variant can be used by appending `-browser` to the end of an existing `cimg/android` tag.
 The browsers variant is designed to work in conjunction with the [CircleCI Browser Tools orb](https://circleci.com/developer/orbs/orb/circleci/browser-tools).
-You can use the orb to install a version of Google Chrome and/or Firefox into your build. The image contains all of the supporting tools needed to use both the browser and its driver.
+You can use the orb to install a version of Google Chrome and/or Firefox into your build.
+The image contains all of the supporting tools needed to use both the browser and its driver.
 
 ```yaml
 orbs:
@@ -86,12 +103,11 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/go:1.13-browsers
+      - image: cimg/android:2021.08-1-browsers
     steps:
       - browser-tools/install-browser-tools
       - checkout
       - run: |
-          go version
           node --version
           java --version
           google-chrome --version
@@ -102,16 +118,14 @@ jobs:
 This image has the following tagging scheme:
 
 ```
-cimg/go:<go-version>[-variant]
+cimg/android:<tag>[-variant]
 ```
 
-`<go-version>` - The version of Go to use.
-This can be a full SemVer point release (such as `1.12.7`) or just the minor release (such as `1.12`).
-If you use the minor release tag, it will automatically point to future patch updates as they are released by the Go Team.
-For example, the tag `1.13` points to Go v1.13 now, but when the next release comes out, it will point to Go v1.13.1.
+`<tag>` - The snapshot of the image to use.
+The available tags and a list of software pre-installed can be found in the [Developer Hub](https://circleci.com/developer/images/image/cimg/android).
 
-`[-variant]` - Variant tags, if available, can optionally be used.
-Once the Node.js variant is available, it could be used like this: `cimg/go:1.13-node`.
+`[-variant]` - a variant tag can optionally be added.
+The available variants can be found [above](#variants).
 
 
 ## Development
@@ -137,7 +151,7 @@ If you missed this step and already cloned, you can just run `git submodule upda
 Then you can optionally add this repo as an upstream to your own:
 
 ```bash
-git remote add upstream https://github.com/CircleCI-Public/cimg-go.git
+git remote add upstream https://github.com/CircleCI-Public/cimg-android.git
 ```
 
 ### Cloning For Maintainers ( you have write access to this repository)
@@ -145,25 +159,25 @@ git remote add upstream https://github.com/CircleCI-Public/cimg-go.git
 Clone the project with the following command so that you populate the submodule:
 
 ```bash
-git clone --recurse-submodules git@github.com:CircleCI-Public/cimg-go.git
+git clone --recurse-submodules git@github.com:CircleCI-Public/cimg-android.git
 ```
 
 ### Generating Dockerfiles
 
-Dockerfiles can be generated for a specific Go version using the `gen-dockerfiles.sh` script.
-For example, to generate the Dockerfile for Go v1.13, you would run the following from the root of the repo:
+Dockerfiles can be generated for this image by using the `gen-dockerfiles.sh` script.
+For example, you would run the following from the root of the repo:
 
 ```bash
-./shared/gen-dockerfiles.sh 1.13
+./shared/gen-dockerfiles.sh 2021.07.1
 ```
 
-The generated Dockerfile will be located at `./1.13/Dockefile`.
+The generated Dockerfile will be located at `./2021.07/Dockerfile`.
 To build this image locally and try it out, you can run the following:
 
 ```bash
-cd 1.13
-docker build -t test/go:1.13 .
-docker run -it test/go:1.13 bash
+cd 2021.07
+docker build -t test/android:2021.07.1 .
+docker run -it test/android:2021.07.1 bash
 ```
 
 ### Building the Dockerfiles
@@ -181,10 +195,10 @@ When releasing proper images for CircleCI, this script is run from a CircleCI pi
 
 The individual scripts (above) can be used to create the correct files for an image, and then added to a new git branch, committed, etc.
 A release script is included to make this process easier.
-To make a proper release for this image, let's use the fake Go version of Go v9.99, you would run the following from the repo root:
+To make a proper release for this image, let's use the fake tag of 2021.07.1, you would run the following from the repo root:
 
 ```bash
-./shared/release.sh 9.99
+./shared/release.sh 2021.07.1
 ```
 
 This will automatically create a new Git branch, generate the Dockerfile(s), stage the changes, commit them, and push them to GitHub.
@@ -214,22 +228,22 @@ git add shared
 git commit -m "Updating submodule for foo."
 ```
 
-**parent image** - By design, when changes happen to a parent image, they don't appear in existing Go images.
+**parent image** - By design, when changes happen to a parent image, they don't appear in existing Android images.
 This is to aid in "determinism" and prevent breaking customer builds.
-New Go images will automatically pick up the changes.
+New Android images will automatically pick up the changes.
 
-If you *really* want to publish changes from a parent image into the Go image, you have to build a specific image version as if it was a new image.
+If you *really* want to publish changes from a parent image into the Android image, you have to build a specific image version as if it was a new image.
 This will create a new Dockerfile and once published, a new image.
 
-**Go specific changes** - Editing the `Dockerfile.template` file in this repo will modify the Go image specifically.
+**Android specific changes** - Editing the `Dockerfile.template` file in this repo will modify the Android image specifically.
 Don't forget that to see any of these changes locally, the `gen-dockerfiles.sh` script will need to be run again (see above).
 
 
 ## Contributing
 
-We encourage [issues](https://github.com/CircleCI-Public/cimg-go/issues) and [pull requests](https://github.com/CircleCI-Public/cimg-go/pulls) against this repository. In order to value your time, here are some things to consider:
+We encourage [issues](https://github.com/CircleCI-Public/cimg-android/issues) and [pull requests](https://github.com/CircleCI-Public/cimg-android/pulls) against this repository. In order to value your time, here are some things to consider:
 
-1. We won't include just anything in this image. In order for us to add a tool within the Go image, it has to be something that is maintained and useful to a large number of Gophers (Go developers). Every tool added makes the image larger and slower for all users so being thorough on what goes in the image will benefit everyone.
+1. We won't include just anything in this image. In order for us to add a tool within the Android image, it has to be something that is maintained and useful to a large number of Android Developers. Every tool added makes the image larger and slower for all users so being opinionated on what goes in the image will benefit everyone.
 1. PRs are welcome. If you have a PR that will potentially take a large amount of time to make, it will be better to open an issue to discuss it first to make sure it's something worth investing the time in.
 1. Issues should be used to report bugs or request additional/removal of tools in this image. For help with images, please visit [CircleCI Discuss](https://discuss.circleci.com/c/ecosystem/circleci-images).
 
