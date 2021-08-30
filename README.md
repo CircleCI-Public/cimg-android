@@ -38,7 +38,7 @@ For example:
 jobs:
   build:
     docker:
-      - image: cimg/android:2021.08-1
+      - image: cimg/android:2021.08.1
     steps:
       - checkout
       - run: ./gradlew androidDependencies
@@ -46,7 +46,7 @@ jobs:
 ```
 
 In the above example, the CircleCI Android Docker image is used for the primary container.
-More specifically, the tag `2021.08-1` is used meaning the August 2021 snapshot of the image is used.
+More specifically, the tag `2021.08.1` is used meaning the August 2021 snapshot of the image is used.
 You can now build and test Android projects within the steps for this job.
 
 
@@ -68,7 +68,7 @@ The NDK variant can be used by appending `-ndk` to the end of an existing `cimg/
 jobs:
   build:
     docker:
-      - image: cimg/android:2021.08-1-ndk
+      - image: cimg/android:2021.08.1-ndk
     steps:
       - checkout
 ```
@@ -83,7 +83,7 @@ The Node.js variant will be used by appending `-node` to the end of an existing 
 jobs:
   build:
     docker:
-      - image: cimg/android:2021.08-1-node
+      - image: cimg/android:2021.08.1-node
     steps:
       - checkout
       - run: node --version
@@ -103,7 +103,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/android:2021.08-1-browsers
+      - image: cimg/android:2021.08.1-browsers
     steps:
       - browser-tools/install-browser-tools
       - checkout
