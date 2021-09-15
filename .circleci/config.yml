@@ -21,4 +21,4 @@ jobs:
           echo 'export DOCKER_PASS=$DOCKER_TOKEN' >> $BASH_ENV
       - sonar/install:
           version: 0.14.1
-      - run: sonar tags delete --dry-run cimg/android 25.0,25.0.0,28.0.0,26.0,26.0.0,27.0.0,29.0.0,27.0,28.0,29.0,30.0,31.0
+      - run: sonar tags delete cimg/android 25.0,25.0.0,28.0.0,26.0,26.0.0,27.0.0,29.0.0,27.0,28.0,29.0,30.0,31.0
