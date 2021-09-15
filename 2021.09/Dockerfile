@@ -1,6 +1,6 @@
 # vim:set ft=dockerfile:
 
-FROM cimg/%%PARENT%%:2021.07
+FROM cimg/base:2021.07
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
@@ -35,7 +35,7 @@ ENV ANDROID_SDK_ROOT $ANDROID_HOME
 ENV CMDLINE_TOOLS_ROOT "${ANDROID_HOME}/cmdline-tools/latest/bin"
 ENV ADB_INSTALL_TIMEOUT 120
 ENV PATH "${ANDROID_HOME}/emulator:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/platform-tools/bin:${PATH}"
-RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip" && \
+RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip" && \
 	mkdir -p ${ANDROID_HOME}/cmdline-tools && \
 	mkdir ${ANDROID_HOME}/platforms && \
 	mkdir ${ANDROID_HOME}/ndk && \
