@@ -12,27 +12,13 @@ workflows:
 jobs:
   build:
     docker:
-      - image: cibuilds/docker:19.03
+      - image: cimg/base:stable
     steps:
       - checkout
       - setup_remote_docker
-      - run:
-          name: "Build Docker Images"
-          command: |
-            ./build-images.sh
-            echo 'export DOCKER_PASS=$DOCKER_TOKEN' >> $BASH_ENV
-      - deploy:
-          name: "Publish Docker Images (main branch only)"
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "main" ]; then
-              
-              echo $DOCKER_TOKEN | docker login -u $DOCKER_USER --password-stdin
-              
-              # an else block will be added in the future for a staging release
-              if git log -1 --pretty=%s | grep "\[release\]"; then
-                echo "Publishing cimg/android to Docker Hub production."
-                docker push cimg/android
-              else
-                echo "Skipping publishing."
-              fi
-            fi
+      - run: |
+          echo $DOCKER_TOKEN | docker login -u $DOCKER_USER --password-stdin
+          echo 'export DOCKER_PASS=$DOCKER_TOKEN' >> $BASH_ENV
+      - sonar/install:
+          version: 0.14.1
+      - run: sonar tags delete --dry-run cimg/android 25.0,25.0.0,28.0.0,26.0,26.0.0,27.0.0,29.0.0,27.0,28.0,29.0,30.0,31.0
