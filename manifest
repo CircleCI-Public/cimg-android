@@ -2,4 +2,4 @@
 
 repository=android
 parent=base
-variants=(ndk)
+variants=(ndk node browsers)
