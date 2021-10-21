@@ -9,13 +9,17 @@ RUN sudo apt-get update && sudo apt-get install -y \
 		ant \
 		openjdk-8-jdk \
 		openjdk-11-jdk \
+		ruby-full \
 	&& \
-	sudo rm -rf /var/lib/apt/lists/*
+	sudo rm -rf /var/lib/apt/lists/* && \
+	ruby -v && \
+	sudo gem install bundler && \
+	bundle version
 
 ENV M2_HOME /usr/local/apache-maven
 ENV MAVEN_OPTS -Xmx2048m
 ENV PATH $M2_HOME/bin:$PATH
-ENV MAVEN_VERSION "3.8.1"
+ENV MAVEN_VERSION "3.8.3"
 RUN curl -sSL -o /tmp/maven.tar.gz http://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
     sudo tar -xz -C /usr/local -f /tmp/maven.tar.gz && \
     sudo ln -sf /usr/local/apache-maven-${MAVEN_VERSION} /usr/local/apache-maven && \
