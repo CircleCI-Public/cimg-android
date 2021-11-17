@@ -10,8 +10,6 @@
 
 [![CircleCI Build Status](https://circleci.com/gh/CircleCI-Public/cimg-android.svg?style=shield)](https://circleci.com/gh/CircleCI-Public/cimg-android) [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/CircleCI-Public/cimg-android/main/LICENSE) [![Docker Pulls](https://img.shields.io/docker/pulls/cimg/android)](https://hub.docker.com/r/cimg/android) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/circleci-images)
 
-***This image is in beta. What's included and how it works can change before reaching General Availability.***
-
 ***This image is designed to supercede the legacy CircleCI Android image, `circleci/android`.***
 
 `cimg/android` is a Docker image created by CircleCI with continuous integration builds in mind.
