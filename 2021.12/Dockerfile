@@ -26,7 +26,7 @@ RUN curl -sSL -o /tmp/maven.tar.gz http://apache.osuosl.org/maven/maven-3/${MAVE
     rm -rf /tmp/maven.tar.gz && \
 	mkdir -p /home/circleci/.m2
 
-ENV GRADLE_VERSION "7.1.1"
+ENV GRADLE_VERSION "7.3.2"
 ENV PATH $PATH:/usr/local/gradle-${GRADLE_VERSION}/bin
 RUN URL=https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip && \
     curl -sSL -o /tmp/gradle.zip $URL && \
