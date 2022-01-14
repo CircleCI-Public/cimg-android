@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  sonar: hubci/sonar@1.0
+  sonar: hubci/sonar@1.0.0
 
 workflows:
   main:
@@ -12,10 +12,11 @@ workflows:
 jobs:
   build:
     docker:
-      - image: cibuilds/docker:19.03
+      - image: cimg/base:2022.01
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: "20.10.11"
       - run:
           name: "Build Docker Images"
           command: |
@@ -25,9 +26,17 @@ jobs:
           name: "Publish Docker Images (main branch only)"
           command: |
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
-              
+
               echo $DOCKER_TOKEN | docker login -u $DOCKER_USER --password-stdin
-              
+
+            # Update the Docker Hub description
+              SONAR_VER=0.15.0
+              SONAR_URL="https://github.com/felicianotech/sonar/releases/download/v${SONAR_VER}/sonar-v${SONAR_VER}-linux-amd64.tar.gz"
+              mkdir -p $HOME/bin
+              curl -sSL $SONAR_URL | tar -xz -C $HOME/bin sonar
+
+              sonar set description cimg/android ./README.md
+
               # an else block will be added in the future for a staging release
               if git log -1 --pretty=%s | grep "\[release\]"; then
                 echo "Publishing cimg/android to Docker Hub production."
@@ -36,3 +45,4 @@ jobs:
                 echo "Skipping publishing."
               fi
             fi
+  
