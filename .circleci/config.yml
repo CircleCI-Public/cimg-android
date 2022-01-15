@@ -15,6 +15,10 @@ jobs:
       - image: cimg/base:2022.01
     steps:
       - checkout
+      - run:
+          name: "Docker Credentials"
+          command: |
+            echo 'export DOCKER_PASS=$DOCKER_TOKEN' >> $BASH_ENV
       - sonar/install:
           version: "0.15.0"
       - sonar/update-readme:
