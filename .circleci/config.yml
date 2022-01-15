@@ -6,20 +6,42 @@ orbs:
 workflows:
   main:
     jobs:
-      - update-readme:
+      - build:
           context: cimg-publishing
 
 jobs:
-  update-readme:
+  build:
     docker:
       - image: cimg/base:2022.01
     steps:
       - checkout
+      - setup_remote_docker:
+          version: "20.10.11"
       - run:
-          name: "Docker Credentials"
+          name: "Build Docker Images"
           command: |
+            ./build-images.sh
             echo 'export DOCKER_PASS=$DOCKER_TOKEN' >> $BASH_ENV
-      - sonar/install:
-          version: "0.15.0"
-      - sonar/update-readme:
-          image: cimg/android
+      - deploy:
+          name: "Publish Docker Images (main branch only)"
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "testing" ]; then
+
+              echo $DOCKER_TOKEN | docker login -u $DOCKER_USER --password-stdin
+
+              # an else block will be added in the future for a staging release
+              if git log -1 --pretty=%s | grep "\[release\]"; then
+                echo "Publishing cimg/android to Docker Hub production."
+                docker push cimg/android
+              else
+                echo "Skipping publishing."
+              fi
+            fi
+      - when:
+          condition:
+            equal: [testing, << pipeline.git.branch >>]
+          steps:
+            - sonar/install:
+                version: "0.15.0"
+            - sonar/update-readme:
+                image: cimg/android
