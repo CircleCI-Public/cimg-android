@@ -32,7 +32,7 @@ jobs:
               # an else block will be added in the future for a staging release
               if git log -1 --pretty=%s | grep "\[release\]"; then
                 echo "Publishing cimg/android to Docker Hub production."
-                docker push cimg/android
+                ./push-images.sh
               else
                 echo "Skipping publishing."
               fi
