@@ -1,6 +1,6 @@
 # vim:set ft=dockerfile:
 
-FROM cimg/android:2022.04
+FROM cimg/android:2022.04.1
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
