@@ -77,7 +77,7 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;android;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;google_play_services"
 
 # Install Google Cloud CLI
-ENV GCLOUD_VERSION "380.0.0-0"
+ENV GCLOUD_VERSION "390.0.0-0"
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - && \
 	sudo add-apt-repository "deb https://packages.cloud.google.com/apt cloud-sdk main" && \
 	sudo apt-get update && sudo apt-get install -y google-cloud-sdk=${GCLOUD_VERSION} && \
