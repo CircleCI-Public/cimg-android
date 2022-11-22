@@ -1,2 +1,2 @@
-# Automatically request PR reviews from the CPE Team as a whole and Ricardo specifically
-*	@CircleCI-Public/cpeng @felicianotech
+# Automatically request PR reviews from the CPE Team as a whole and the Images subteam
+*	@CircleCI-Public/cpeng @CircleCI-Public/images
