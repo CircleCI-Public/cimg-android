@@ -1,47 +1,26 @@
 version: 2.1
 
 orbs:
-  sonar: hubci/sonar@1.0.0
+  cimg: circleci/cimg@0.3.0
 
 workflows:
-  main:
+  main-wf:
     jobs:
-      - build:
+      - cimg/build-and-deploy:
+          name: "Staging"
+          docker-namespace: ccitest
+          docker-repository: android
+          publish-branch: test
+          filters:
+            branches:
+              ignore:
+                - main
           context: cimg-publishing
-
-jobs:
-  build:
-    docker:
-      - image: cimg/base:2022.01
-    steps:
-      - checkout
-      - setup_remote_docker:
-          version: "20.10.11"
-      - run:
-          name: "Build Docker Images"
-          command: |
-            ./build-images.sh
-            echo 'export DOCKER_PASS=$DOCKER_TOKEN' >> $BASH_ENV
-      - deploy:
-          name: "Publish Docker Images (main branch only)"
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "main" ]; then
-
-              echo $DOCKER_TOKEN | docker login -u $DOCKER_USER --password-stdin
-
-              # an else block will be added in the future for a staging release
-              if git log -1 --pretty=%s | grep "\[release\]"; then
-                echo "Publishing cimg/android to Docker Hub production."
-                ./push-images.sh
-              else
-                echo "Skipping publishing."
-              fi
-            fi
-      - when:
-          condition:
-            equal: [main, << pipeline.git.branch >>]
-          steps:
-            - sonar/install:
-                version: "0.15.0"
-            - sonar/update-readme:
-                image: cimg/android
+      - cimg/build-and-deploy:
+          name: "Deploy"
+          docker-repository: android
+          filters:
+            branches:
+              only:
+                - main
+          context: cimg-publishing
