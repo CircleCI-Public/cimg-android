@@ -8,7 +8,7 @@
 
 # NOTE: This uses November due to an OpenSSL CVE fix. We will resume using quarterly versions of cimg-base in Q1
 # NOTE: 20.04 will be used until a date has been set and announced for upgrading to 22.04
-FROM cimg/%%PARENT%%:2022.11-20.04
+FROM cimg/base:2022.11-20.04
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
