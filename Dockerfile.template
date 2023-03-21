@@ -63,7 +63,7 @@ RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-lin
 
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "tools" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platform-tools" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;34.0.0-rc1"
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;34.0.0-rc2"
 
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-UpsideDownCake" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-33" && \
