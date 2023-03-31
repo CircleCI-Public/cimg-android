@@ -3,7 +3,18 @@ version: 2.1
 orbs:
   cimg: circleci/cimg@0.3.0
 
+parameters:
+  cron:
+    type: boolean
+    default: true
+
 workflows:
+  automated-wf:
+      when: << pipeline.parameters.cron >>
+      jobs:
+        - check-feed:
+            context:
+              - cimg-publishing
   main-wf:
     jobs:
       - cimg/build-and-deploy:
@@ -24,3 +35,42 @@ workflows:
               only:
                 - main
           context: cimg-publishing
+jobs:
+  check-feed:
+    docker:
+      - image: cimg/android:2023.03
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "f8:07:0f:f6:b5:eb:57:ae:be:4d:2f:2d:be:70:8f:ff"
+      - run:
+          name: SSH config to pull and push project
+          command: |
+            ssh-add -D
+            ssh-add ~/.ssh/id_rsa_f8070ff6b5eb57aebe4d2f2dbe708fff
+            ssh-keygen -f ~/.ssh/id_rsa_f8070ff6b5eb57aebe4d2f2dbe708fff -y > ~/.ssh/id_rsa_f8070ff6b5eb57aebe4d2f2dbe708fff.pub
+            echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFHZoU4/njm1peseKCHfY4igdb4cbVwK16ADNlIoj6Ch secops+cpe-image-bot@circleci.com" > ~/.ssh/allowed_signers
+      - run:
+          name: Run git config
+          command: |
+            cat \<<'EOF' >> ~/githelper.sh
+              #!/usr/bin/env bash
+              echo username=$GIT_USERNAME
+              echo password=$IMAGE_BOT_TOKEN
+            EOF
+            git config --global user.email "secops+cpe-image-bot@circleci.com"
+            git config --global user.name "cpe-image-bot"
+            git config --global user.signingkey "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFHZoU4/njm1peseKCHfY4igdb4cbVwK16ADNlIoj6Ch"
+            git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
+            git config --global url."https://github.com".insteadOf ssh://git@github.com
+            git config --global url."https://github.com/".insteadOf git@github.com:
+            git config --global credential.helper "/bin/bash ~/githelper.sh"
+            git config --global gpg.format ssh
+            git config --global commit.gpgsign true
+            git submodule sync
+      - run:
+          name: Run version update script
+          command: |
+            sudo chmod +x androidFeed.sh
+            ./androidFeed.sh
