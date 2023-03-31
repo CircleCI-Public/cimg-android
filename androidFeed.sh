@@ -68,5 +68,5 @@ echo $PLATFORMS_LIST
 
 if [[ $CHANGES -ge 1 ]]; then
     generateDatedTags
-    ./shared/gen-dockerfiles.sh $RELEASE
+    ./shared/release.sh $RELEASE
 fi
