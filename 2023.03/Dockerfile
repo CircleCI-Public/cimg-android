@@ -31,14 +31,14 @@ ENV PATH $M2_HOME/bin:$PATH
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ENV JDK_HOME=${JAVA_HOME}
 ENV JRE_HOME=${JDK_HOME}
-ENV MAVEN_VERSION=3.9.0
+ENV MAVEN_VERSION=3.9.1
 RUN curl -sSL -o /tmp/maven.tar.gz http://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
 	sudo tar -xz -C /usr/local -f /tmp/maven.tar.gz && \
 	sudo ln -sf /usr/local/apache-maven-${MAVEN_VERSION} /usr/local/apache-maven && \
 	rm -rf /tmp/maven.tar.gz && \
 	mkdir -p /home/circleci/.m2
 
-ENV GRADLE_VERSION=8.0.1
+ENV GRADLE_VERSION=8.0.2
 ENV PATH $PATH:/usr/local/gradle-${GRADLE_VERSION}/bin
 RUN URL=https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip && \
 	curl -sSL -o /tmp/gradle.zip $URL && \
@@ -78,11 +78,11 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-UpsideDownCake"
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;android;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;google_play_services" && \
-	sudo gem install fastlane --version 2.208.0 --no-document
+	sudo gem install fastlane --version 2.212.1 --no-document
 
 # Install Google Cloud CLI
 # Latest gcloud version can be found here: https://cloud.google.com/sdk/docs/release-notes
-ENV GCLOUD_VERSION=420.0.0-0
+ENV GCLOUD_VERSION=424.0.0-0
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - && \
 	sudo add-apt-repository "deb https://packages.cloud.google.com/apt cloud-sdk main" && \
 	sudo apt-get update && sudo apt-get install -y google-cloud-sdk=${GCLOUD_VERSION} && \
