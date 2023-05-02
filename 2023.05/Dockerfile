@@ -6,11 +6,11 @@
 # specific reason to use a different one. This means January, April, July, or
 # October.
 
-FROM cimg/base:2023.03
+FROM cimg/base:2023.04
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
-# Java 11 is default
+# Java 17 is default
 RUN sudo apt-get update && sudo apt-get install -y \
 		ant \
 		openjdk-8-jdk \
@@ -26,12 +26,12 @@ ENV M2_HOME /usr/local/apache-maven
 ENV MAVEN_OPTS -Xmx2048m
 ENV PATH $M2_HOME/bin:$PATH
 # Set JAVA_HOME (and related) environment variable. This will be set to our
-# default Java version of 11 but the user would need to reset it when changing
+# default Java version of 17 but the user would need to reset it when changing
 # JAVA versions.
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ENV JDK_HOME=${JAVA_HOME}
 ENV JRE_HOME=${JDK_HOME}
-ENV MAVEN_VERSION=3.9.1
+ENV MAVEN_VERSION=3.9.0
 RUN curl -sSL -o /tmp/maven.tar.gz http://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
 	sudo tar -xz -C /usr/local -f /tmp/maven.tar.gz && \
 	sudo ln -sf /usr/local/apache-maven-${MAVEN_VERSION} /usr/local/apache-maven && \
@@ -78,7 +78,7 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-UpsideDownCake"
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;android;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;google_play_services" && \
-	sudo gem install fastlane --version 2.212.1 --no-document
+	sudo gem install fastlane --version 2.208.0 --no-document
 
 # Install Google Cloud CLI
 # Latest gcloud version can be found here: https://cloud.google.com/sdk/docs/release-notes
