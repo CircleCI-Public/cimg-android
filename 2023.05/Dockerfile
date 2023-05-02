@@ -31,7 +31,7 @@ ENV PATH $M2_HOME/bin:$PATH
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ENV JDK_HOME=${JAVA_HOME}
 ENV JRE_HOME=${JDK_HOME}
-ENV MAVEN_VERSION=3.9.0
+ENV MAVEN_VERSION=3.9.1
 RUN curl -sSL -o /tmp/maven.tar.gz http://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
 	sudo tar -xz -C /usr/local -f /tmp/maven.tar.gz && \
 	sudo ln -sf /usr/local/apache-maven-${MAVEN_VERSION} /usr/local/apache-maven && \
