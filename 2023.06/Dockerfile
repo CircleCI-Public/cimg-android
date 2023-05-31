@@ -22,6 +22,9 @@ RUN sudo apt-get update && sudo apt-get install -y \
 	sudo gem install bundler && \
 	bundle version
 
+#fixes issue with bundle install highlighted in https://github.com/CircleCI-Public/cimg-android/issues/82 
+RUN sudo chmod -R a+w /var/lib/gems/ /usr/local/bin
+
 ENV M2_HOME /usr/local/apache-maven
 ENV MAVEN_OPTS -Xmx2048m
 ENV PATH $M2_HOME/bin:$PATH
