@@ -20,7 +20,9 @@ RUN sudo apt-get update && sudo apt-get install -y \
 	sudo rm -rf /var/lib/apt/lists/* && \
 	ruby -v && \
 	sudo gem install bundler && \
-	bundle version
+	bundle version && \
+	# Create symlink for JAVA_HOME environment variable due to path containing architecture
+	sudo ln -s /usr/lib/jvm/java-17-openjdk-* /usr/lib/jvm/java-17-openjdk
 
 #fixes issue with bundle install highlighted in https://github.com/CircleCI-Public/cimg-android/issues/82 
 RUN sudo chmod -R a+w /var/lib/gems/ /usr/local/bin
@@ -31,7 +33,7 @@ ENV PATH $M2_HOME/bin:$PATH
 # Set JAVA_HOME (and related) environment variable. This will be set to our
 # default Java version of 17 but the user would need to reset it when changing
 # JAVA versions.
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 ENV JDK_HOME=${JAVA_HOME}
 ENV JRE_HOME=${JDK_HOME}
 ENV MAVEN_VERSION=3.9.3
