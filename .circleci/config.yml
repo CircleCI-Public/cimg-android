@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  cimg: circleci/cimg@0.3.0
+  cimg: circleci/cimg@0.3.3
 
 workflows:
   main-wf:
