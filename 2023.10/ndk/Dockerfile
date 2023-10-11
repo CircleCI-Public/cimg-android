@@ -1,6 +1,6 @@
 # vim:set ft=dockerfile:
 
-FROM %%NAMESPACE%%/%%PARENT%%:%%PARENT_TAG%%
+FROM cimg/android:2023.10.1
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
