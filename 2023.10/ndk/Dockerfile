@@ -1,6 +1,6 @@
 # vim:set ft=dockerfile:
 
-FROM cimg/android:2023.10.1
+FROM cimg/android:2023.10.2
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
@@ -9,7 +9,7 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "cmake;3.18.1" && \
 
 # Use the last two versions of the NDK
 # Setup LTS release
-ENV NDK_LTS_VERSION 26.0.10792818"
+ENV NDK_LTS_VERSION "26.0.10792818"
 ENV ANDROID_NDK_HOME "/home/circleci/android-sdk/ndk/${NDK_LTS_VERSION}"
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "ndk;${NDK_LTS_VERSION}"
 
