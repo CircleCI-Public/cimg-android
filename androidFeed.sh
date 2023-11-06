@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 echo "Initializing submodule..."
 git submodule update --init --recursive
@@ -38,6 +38,7 @@ awk -F. '!seen[$1]++' |
 head -n 3)
 
 myArray=()
+
 echo "$BUILD_TOOLS_VERSIONS" | while read -r line
 do
     myArray+=("$line")
