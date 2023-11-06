@@ -37,7 +37,7 @@ sort -t. -Vr |
 awk -F. '!seen[$1]++' |
 head -n 3)
 
-readarray -t myArray <<< "$BUILD_TOOLS_VERSIONS"
+readarray -t myArray > "$BUILD_TOOLS_VERSIONS"
 # To verify, let's print all elements of the array
 for element in "${myArray[@]}"
 do
