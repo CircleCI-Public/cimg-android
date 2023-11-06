@@ -6,6 +6,7 @@ else
   echo "Check if submodule was loaded; automated-updates.sh is missing"
   exit 1
 fi
+cd ..
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/circleci/.profile
