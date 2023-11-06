@@ -42,17 +42,17 @@ echo ${PLATFORMS_ARRAY[@]}
 
 sed -i "37c\ENV MAVEN_VERSION=$MAVEN_VERSION" Dockerfile.template
 sed -i "44c\ENV GRADLE_VERSION=$GRADLE_VERSION" Dockerfile.template
-sed -i "62c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "${BUILD_TOOLS_ARRAY[0]}" && \" Dockerfile.template
-sed -i "63c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "${BUILD_TOOLS_ARRAY[1]}" && \" Dockerfile.template
-sed -i "64c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "${BUILD_TOOLS_ARRAY[2]}" && \" Dockerfile.template
-sed -i "66c\RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "${PLATFORMS_ARRAY[0]}" && \" Dockerfile.template
-sed -i "67c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-33" && \" Dockerfile.template
-sed -i "68c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-32" && \" Dockerfile.template
-sed -i "69c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-31" && \" Dockerfile.template
-sed -i "70c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-30" && \" Dockerfile.template
-sed -i "71c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-29" && \" Dockerfile.template
-sed -i "72c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-28" && \" Dockerfile.template
-sed -i "73c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-27"" Dockerfile.template
+sed -i "62c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager ${BUILD_TOOLS_ARRAY[0]} && \" Dockerfile.template
+sed -i "63c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager ${BUILD_TOOLS_ARRAY[1]} && \" Dockerfile.template
+sed -i "64c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager ${BUILD_TOOLS_ARRAY[2]} && \" Dockerfile.template
+sed -i "66c\RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager ${PLATFORMS_ARRAY[0]} && \" Dockerfile.template
+sed -i "67c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager ${PLATFORMS_ARRAY[1]} && \" Dockerfile.template
+sed -i "68c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager ${PLATFORMS_ARRAY[2]} && \" Dockerfile.template
+sed -i "69c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager ${PLATFORMS_ARRAY[3]} && \" Dockerfile.template
+sed -i "70c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager ${PLATFORMS_ARRAY[4]} && \" Dockerfile.template
+sed -i "71c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager ${PLATFORMS_ARRAY[5]} && \" Dockerfile.template
+sed -i "72c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager ${PLATFORMS_ARRAY[6]} && \" Dockerfile.template
+sed -i "73c\echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager ${PLATFORMS_ARRAY[7]}" Dockerfile.template
 sed -i "78c\sudo gem install fastlane --version $FASTLANE_VERSION --no-document && \" Dockerfile.template
 sed -i "83c\ENV GCLOUD_VERSION=$GCLOUD_VERSION" Dockerfile.template
 
