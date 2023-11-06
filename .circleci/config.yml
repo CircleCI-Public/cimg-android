@@ -6,7 +6,7 @@ orbs:
 jobs:
   automated-wf:
     docker:
-      - image: cimg/base:current
+      - image: cimg/android:current
     steps:
       - checkout
       - run: sh androidFeed.sh
