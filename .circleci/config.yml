@@ -38,7 +38,7 @@ workflows:
 jobs:
   check-feed:
     docker:
-      - image: cimg/android:2023.03
+      - image: cimg/base:current
     steps:
       - checkout
       - add_ssh_keys:
