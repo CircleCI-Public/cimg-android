@@ -37,14 +37,15 @@ sort -t. -Vr |
 awk -F. '!seen[$1]++' |
 head -n 3)
 
-readarray -t myArray > "$BUILD_TOOLS_VERSIONS"
-# To verify, let's print all elements of the array
-for element in "${myArray[@]}"
+echo "$BUILD_TOOLS_VERSIONS" | while read -r line
 do
-  echo "$element"
+    myArray+=($line)
 done
+echo ${myArray[0]}
+echo ${myArray[1]}
+echo ${myArray[2]}
 
-
+echo ${myArray[@]}
 # if [[ $CHANGES -ge 1 ]]; then
 #     generateDatedTags
 #     ./shared/gen-dockerfiles.sh $RELEASE
