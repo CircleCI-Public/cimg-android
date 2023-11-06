@@ -3,6 +3,13 @@ version: 2.1
 orbs:
   cimg: circleci/cimg@0.3.4
 
+jobs:
+  automated-wf:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run: sh androidFeed.sh
 workflows:
   main-wf:
     jobs:
@@ -24,3 +31,6 @@ workflows:
               only:
                 - main
           context: cimg-publishing
+  check-feed:
+    jobs:
+      - automated-wf
