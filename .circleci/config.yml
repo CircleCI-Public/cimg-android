@@ -70,4 +70,6 @@ workflows:
           context: cimg-publishing
   check-feed:
     jobs:
-      - automated-wf
+      - automated-wf:
+          context:
+            - cimg-publishing
