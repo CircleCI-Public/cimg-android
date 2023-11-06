@@ -1,7 +1,5 @@
 !/usr/bin/env bash
 
-echo "Initializing submodule..."
-git submodule update --init --recursive
 cd shared || exit && \
 if [ -f automated-updates.sh ]; then
   source automated-updates.sh
