@@ -3,7 +3,7 @@
 echo "Initializing submodule..."
 git submodule update --init --recursive
 cd shared || exit && \
-git checkout feat/version-checking
+git checkout
 if [ -f automated-updates.sh ]; then
   source automated-updates.sh
 else
