@@ -51,6 +51,16 @@ sed -i '78c\    sudo gem install fastlane --version '"$FASTLANE_VERSION"' --no-d
 sed -i '83c\ENV GCLOUD_VERSION='"$GCLOUD_VERSION"'' Dockerfile.template > newDockerfile.template && mv newDockerfile.template Dockerfile.template
 
 generateDatedTags
-./shared/release.sh $RELEASE
+
+defaultBranch=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
+
+branchName="release-v$RELEASE"
+
+git checkout -b -f "v${RELEASE}" "${defaultBranch}"
+shared/gen-dockerfiles.sh "$RELEASE"
+git add .
+git commit -m "Publish v$RELEASE. [release]"
+git push -u origin "${branchName}"
+gh pr create --title "Publish v$RELEASE. [release]" --head "$branchName" --body "Publish v$RELEASE. [release]"
 
 echo "yay it finished"
