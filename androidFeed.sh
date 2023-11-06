@@ -56,7 +56,7 @@ defaultBranch=$(git remote show origin | grep 'HEAD branch' | cut -d' ' -f5)
 
 branchName="release-v$RELEASE"
 
-git checkout -b -f "v${RELEASE}" "${defaultBranch}"
+git checkout -f -b "v${RELEASE}" "${defaultBranch}"
 shared/gen-dockerfiles.sh "$RELEASE"
 git add .
 git commit -m "Publish v$RELEASE. [release]"
