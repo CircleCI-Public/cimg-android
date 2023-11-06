@@ -30,25 +30,25 @@ echo "Build tools version: "$BUILD_TOOLS
 
 CHANGES=0
 generateVersions $GCLOUD_VERSION
-generateSearchTerms "GCLOUD_VERSION" "2023.03/Dockerfile"
-# shellcheck disable=SC2154
-directoryCheck "2023.03" "$SEARCH_TERM"
+# generateSearchTerms "GCLOUD_VERSION" "2023.03/Dockerfile"
+# # shellcheck disable=SC2154
+# directoryCheck "2023.03" "$SEARCH_TERM"
 if [[ $(echo $?) == 0 ]]; then
     sed -i "s/GCLOUD_VERSION=.*/ENV GCLOUD_VERSION=${GCLOUD_VERSION}/g" Dockerfile.template
     CHANGES=$(($CHANGES + 1))
 fi
 generateVersions $GRADLE_VERSION
-generateSearchTerms "GRADLE_VERSION" "2023.03/Dockerfile"
-# shellcheck disable=SC2154
-directoryCheck "2023.03" "$SEARCH_TERM"
+# generateSearchTerms "GRADLE_VERSION" "2023.03/Dockerfile"
+# # shellcheck disable=SC2154
+# directoryCheck "2023.03" "$SEARCH_TERM"
 if [[ $(echo $?) == 0 ]]; then
     sed -i "s/GRADLE_VERSION=.*/ENV GRADLE_VERSION=${GRADLE_VERSION}/g" Dockerfile.template
     CHANGES=$(($CHANGES + 1))
 fi
 generateVersions $MAVEN_VERSION
-generateSearchTerms "MAVEN_VERSION" "2023.03/Dockerfile"
-# shellcheck disable=SC2154
-directoryCheck "2023.03" "$SEARCH_TERM"
+# generateSearchTerms "MAVEN_VERSION" "2023.03/Dockerfile"
+# # shellcheck disable=SC2154
+# directoryCheck "2023.03" "$SEARCH_TERM"
 if [[ $(echo $?) == 0 ]]; then
     sed -i "s/MAVEN_VERSION=.*/ENV MAVEN_VERSION=${MAVEN_VERSION}/g" Dockerfile.template
     CHANGES=$(($CHANGES + 1))
