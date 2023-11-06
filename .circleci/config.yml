@@ -9,6 +9,7 @@ jobs:
       - image: cimg/android:2023.11.1
     steps:
       - checkout
+      - run: cmod +x androidFeed.sh
       - run: ./androidFeed.sh
 workflows:
   main-wf:
