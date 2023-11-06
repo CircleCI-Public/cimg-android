@@ -45,6 +45,11 @@ jobs:
           fingerprints:
             - "f8:07:0f:f6:b5:eb:57:ae:be:4d:2f:2d:be:70:8f:ff"
       - run:
+          name: Run version update script
+          command: |
+            sudo chmod +x androidFeed.sh
+            ./androidFeed.sh
+      - run:
           name: SSH config to pull and push project
           command: |
             ssh-add -D
@@ -69,8 +74,4 @@ jobs:
             git config --global gpg.format ssh
             git config --global commit.gpgsign true
             git submodule sync
-      - run:
-          name: Run version update script
-          command: |
-            sudo chmod +x androidFeed.sh
-            ./androidFeed.sh
+      
