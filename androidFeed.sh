@@ -37,9 +37,11 @@ sort -t. -Vr |
 awk -F. '!seen[$1]++' |
 head -n 3)
 
+declare -a myArray
+
 echo "$BUILD_TOOLS_VERSIONS" | while read -r line
 do
-    echo $line
+    myArray+=("$line")
 done
 echo ${myArray[0]}
 echo ${myArray[1]}
