@@ -70,3 +70,5 @@ if [[ $CHANGES -ge 1 ]]; then
     generateDatedTags
     ./shared/release.sh $RELEASE
 fi
+
+echo "Done"
