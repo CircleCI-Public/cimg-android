@@ -1,16 +1,11 @@
 !/usr/bin/env bash
 
-echo "Initializing submodule..."
-git submodule update --init --recursive
-cd shared || exit && \
-git checkout
-if [ -f automated-updates.sh ]; then
-  source automated-updates.sh
+if [ -f shared/automated-updates.sh ]; then
+  source shared/automated-updates.sh
 else
   echo "Check if submodule was loaded; automated-updates.sh is missing"
   exit 1
 fi
-cd ..
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/circleci/.profile
@@ -71,4 +66,4 @@ if [[ $CHANGES -ge 1 ]]; then
     ./shared/release.sh $RELEASE
 fi
 
-echo "Done"
+echo "DONE"
