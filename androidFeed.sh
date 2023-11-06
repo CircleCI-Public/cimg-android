@@ -1,7 +1,10 @@
 !/usr/bin/env bash
 
-if [ -f shared/automated-updates.sh ]; then
-  source shared/automated-updates.sh
+echo "Initializing submodule..."
+git submodule update --init --recursive
+cd shared || exit && \
+if [ -f automated-updates.sh ]; then
+  source automated-updates.sh
 else
   echo "Check if submodule was loaded; automated-updates.sh is missing"
   exit 1
