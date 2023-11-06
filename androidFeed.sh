@@ -34,10 +34,10 @@ awk -F'|' '{print $1}' |
 sort -t. -k1,1n -k2,2n -k3,3 -k4 -s |
 awk -F. '!seen[$1"."$2"-"$3]++' | 
 sort -t. -Vr | 
-awk -F. '!seen[$1]++')
+awk -F. '!seen[$1]++' |
+head -n 3)
 
-readarray -t myArray <<< $(echo "$BUILD_TOOLS_VERSIONS" | head -n 3)
-
+readarray -t myArray <<< "$BUILD_TOOLS_VERSIONS"
 # To verify, let's print all elements of the array
 for element in "${myArray[@]}"
 do
