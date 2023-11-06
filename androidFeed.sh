@@ -12,9 +12,9 @@ else
 fi
 cd ..
 
-# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-# (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/circleci/.profile
-# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+(echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/circleci/.profile
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 GCLOUD_VERSION=$(gcloud version | head -1 | sed 's/[^0-9.]//g')
 echo "Gcloud version: "$GCLOUD_VERSION
