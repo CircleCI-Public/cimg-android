@@ -16,6 +16,8 @@ cd ..
 (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/circleci/.profile
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+sdkmanager --update
+
 GCLOUD_VERSION=$(gcloud version | head -1 | sed 's/[^0-9.]//g')
 echo "Gcloud version: "$GCLOUD_VERSION
 
