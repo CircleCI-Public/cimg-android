@@ -30,11 +30,10 @@ echo "Build tools version: "$BUILD_TOOLS
 BUILD_TOOLS_MAJOR=$(echo $BUILD_TOOLS | awk -F'[;.]' '{print $2}')
 BUILD_TOOLS_VERSIONS=$(sdkmanager --list | grep "build-tools" | awk -F';' '{print $2}' | awk -F'|' '{print $1}' | sort -t. -k1,1n -k2,2n -k3,3 -k4 -s | awk -F. '!seen[$1"."$2"-"$3]++' | sort -t. -Vr | awk -F. '!seen[$1]++' | head -n 3)
 
-read -r BUILD_TOOLS_NEW BUILD_TOOLS_STABLE BUILD_TOOLS_LTS <<< "$(echo -e "$BUILD_TOOLS_VERSIONS")"
-
-echo $BUILD_TOOLS_NEW
-echo $BUILD_TOOLS_STABLE
-echo $BUILD_TOOLS_LTS
+readarray -t my_array <<< "$BUILD_TOOLS_VERSIONS"
+echo "${my_array[0]}"
+echo "${my_array[1]}"
+echo "${my_array[2]}"
 # if [[ $CHANGES -ge 1 ]]; then
 #     generateDatedTags
 #     ./shared/gen-dockerfiles.sh $RELEASE
