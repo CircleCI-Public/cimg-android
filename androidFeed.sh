@@ -39,7 +39,7 @@ head -n 3)
 
 echo "$BUILD_TOOLS_VERSIONS" | while read -r line
 do
-    myArray+=("$line")
+    echo $line
 done
 echo ${myArray[0]}
 echo ${myArray[1]}
