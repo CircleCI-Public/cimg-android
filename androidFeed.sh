@@ -25,12 +25,17 @@ echo "Gradle version: "$GRADLE_VERSION
 MAVEN_VERSION=$(brew info maven | head -1 | sed 's/[^0-9.]//g')
 echo "Maven version: "$MAVEN_VERSION
 
-BUILD_TOOLS=$(sdkmanager --list | grep "build-tools" | tail -1 | sed 's/.*|\(.*\)|.*/\1/' | sed 's/^[[:space:]]*//' | sed 's/ *$//' | sed -e 's/\s\+/-/g' | sed 's/ /-/g')
-echo "Build tools version: "$BUILD_TOOLS
-BUILD_TOOLS_MAJOR=$(echo $BUILD_TOOLS | awk -F'[;.]' '{print $2}')
+FASTLANE_VERSION=$(brew info gradle | head -1 | sed 's/[^0-9.]//g')
+echo "Fastlane version: "$FASTLANE_VERSION
+
+# BUILD_TOOLS=$(sdkmanager --list | grep "build-tools" | tail -1 | sed 's/.*|\(.*\)|.*/\1/' | sed 's/^[[:space:]]*//' | sed 's/ *$//' | sed -e 's/\s\+/-/g' | sed 's/ /-/g')
+# echo "Build tools version: "$BUILD_TOOLS
+# BUILD_TOOLS_MAJOR=$(echo $BUILD_TOOLS | awk -F'[;.]' '{print $2}')
 BUILD_TOOLS_VERSIONS=$(sdkmanager --list | grep "build-tools" | awk -F';' '{print $2}' | awk -F'|' '{print $1}' | sort -t. -k1,1n -k2,2n -k3,3 -k4 -s | awk -F. '!seen[$1"."$2"-"$3]++' | sort -t. -Vr | awk -F. '!seen[$1]++' | head -n 3)
 
 readarray -t BUILD_TOOLS_ARRAY <<< "$BUILD_TOOLS_VERSIONS"
+
+echo $BUILD_TOOLS_ARRAY
 
 
 # if [[ $CHANGES -ge 1 ]]; then
