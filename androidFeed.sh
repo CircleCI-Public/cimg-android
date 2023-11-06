@@ -37,7 +37,7 @@ readarray -t BUILD_TOOLS_ARRAY <<< "$BUILD_TOOLS_VERSIONS"
 
 echo $BUILD_TOOLS_ARRAY
 
-PLATFORMS=$(sdk --list | grep "platforms;android" | cut -d'|' -f1 | grep -v 'Sandbox' | grep -v 'ext' | sort -t- -nk2 | uniq)
+PLATFORMS=$(sdkmanager --list | grep "platforms;android" | cut -d'|' -f1 | grep -v 'Sandbox' | grep -v 'ext' | sort -t- -nk2 | uniq)
 echo $PLATFORMS
 
 # if [[ $CHANGES -ge 1 ]]; then
