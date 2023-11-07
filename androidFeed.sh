@@ -1,16 +1,20 @@
 #!/bin/bash
 
-# echo "Initializing submodule..."
-# git submodule update --init --recursive
-# cd shared || exit && \
-# git checkout main
-# if [ -f automated-updates.sh ]; then
-#   source automated-updates.sh
-# else
-#   echo "Check if submodule was loaded; automated-updates.sh is missing"
-#   exit 1
-# fi
-# cd ..
+echo "Initializing submodule..."
+git submodule update --init --recursive
+cd shared || exit && \
+git checkout main
+if [ -f automated-updates.sh ]; then
+  source automated-updates.sh
+else
+  echo "Check if submodule was loaded; automated-updates.sh is missing"
+  exit 1
+fi
+cd ..
+
+generateDatedTags
+
+git checkout -b "release-v$RELEASE"
 
 sdkmanager --update
 
@@ -50,7 +54,10 @@ sed -i '73c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${PLATFORMS_ARRAY[7]
 sed -i '78c\    sudo gem install fastlane --version '"$FASTLANE_VERSION"' --no-document && \\' Dockerfile.template
 sed -i '83c\ENV GCLOUD_VERSION='"$GCLOUD_VERSION"'' Dockerfile.template > newDockerfile.template && mv newDockerfile.template Dockerfile.template
 
-generateDatedTags
-./shared/release.sh $RELEASE
+shared/gen-dockerfiles.sh "$@"
+git add .
+git commit -m "Publish v$RELEASE. [release]"
+git push -u origin "release-v$RELEASE"
+gh pr create --title "Publish v$RELEASE. [release]" --head "release-v$RELEASE" --body "Publish v$RELEASE. [release]"
 
 echo "yay it finished"
