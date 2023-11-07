@@ -36,9 +36,13 @@ readarray -t BUILD_TOOLS_ARRAY <<< "$BUILD_TOOLS_VERSIONS"
 
 PLATFORMS=$(sdkmanager --list | grep "platforms;android" | cut -d'|' -f1 | grep -v 'Sandbox' | grep -v 'ext' | sort -t- -nk2 | tr -d '[:blank:]' | awk -F- '!seen[$NF]++' | tail -7)
 
-IFS=' ' read -ra PLATFORMS_ARRAY <<< "$PLATFORMS"
+# Split the output into an array using 'read'
+read -a array <<< "$PLATFORMS"
 
-echo ${PLATFORMS_ARRAY[1]}
+# Print all items in the array
+for item in "${array[@]}"; do
+  echo "$item"
+done
 
 sed -i '37c\ENV MAVEN_VERSION='"$MAVEN_VERSION"'' Dockerfile.template
 sed -i '44c\ENV GRADLE_VERSION='"$GRADLE_VERSION"'' Dockerfile.template
