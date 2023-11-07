@@ -4,6 +4,11 @@ orbs:
   cimg: circleci/cimg@0.3.4
   gh: circleci/github-cli@2.2.0
 
+parameters:
+  cron:
+    type: boolean
+    default: false
+
 jobs:
   automated-wf:
     docker:
@@ -49,6 +54,8 @@ jobs:
             ./androidFeed.sh
 workflows:
   main-wf:
+    when:
+      not: << pipeline.parameters.cron >>
     jobs:
       - cimg/build-and-deploy:
           name: "Staging"
@@ -69,6 +76,7 @@ workflows:
                 - main
           context: cimg-publishing
   check-feed:
+    when: << pipeline.parameters.cron >>
     jobs:
       - automated-wf:
           context:
