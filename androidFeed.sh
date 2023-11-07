@@ -54,7 +54,7 @@ sed -i '73c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${PLATFORMS_ARRAY[7]
 sed -i '78c\    sudo gem install fastlane --version '"$FASTLANE_VERSION"' --no-document && \\' Dockerfile.template
 sed -i '83c\ENV GCLOUD_VERSION='"$GCLOUD_VERSION"'' Dockerfile.template > newDockerfile.template && mv newDockerfile.template Dockerfile.template
 
-shared/gen-dockerfiles.sh "$@"
+shared/gen-dockerfiles.sh "$RELEASE"
 git add .
 git commit -m "Publish v$RELEASE. [release]"
 git push -u origin "release-v$RELEASE"
