@@ -55,7 +55,7 @@ ENV CMDLINE_TOOLS_ROOT "${ANDROID_HOME}/cmdline-tools/latest/bin"
 ENV ADB_INSTALL_TIMEOUT 120
 ENV PATH "${ANDROID_HOME}/emulator:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/platform-tools/bin:${PATH}"
 # You can find the latest command line tools here: https://developer.android.com/studio#command-line-tools-only
-RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip" && \
+RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip" && \
 	mkdir -p ${ANDROID_HOME}/cmdline-tools && \
 	mkdir ${ANDROID_HOME}/platforms && \
 	mkdir ${ANDROID_HOME}/ndk && \
@@ -66,25 +66,24 @@ RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-lin
 
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "tools" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platform-tools" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;34.0.0-rc3" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;33.0.2" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;30.0.3"
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager 34.0.0-rc3 && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager 33.0.2 && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager 32.1.0-rc1 && \
 
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-34" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-33" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-32" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-31" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-30" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-29" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-28" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-27"
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager platforms;android-28 && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager platforms;android-29 && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager platforms;android-30 && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager platforms;android-31 && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager platforms;android-32 && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager platforms;android-33 && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager platforms;android-34
 
-# Install some useful packages
+ENV GCLOUD_VERSION=453.0.0-0
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;android;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;google_play_services" && \
 	sudo gem install fastlane --version 2.216.0 --no-document && \
-	curl -sL https://firebase.tools | bash
+    sudo gem install fastlane --version 2.216.0 --no-document && \
 
 # Install Google Cloud CLI
 # Latest gcloud version can be found here: https://cloud.google.com/sdk/docs/release-notes
