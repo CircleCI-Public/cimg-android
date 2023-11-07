@@ -38,7 +38,7 @@ PLATFORMS=$(sdkmanager --list | grep "platforms;android" | cut -d'|' -f1 | grep 
 
 read -a PLATFORMS_ARRAY <<< "$PLATFORMS"
 
-echo ${PLATFORMS_ARRAY[0]}
+echo ${PLATFORMS_ARRAY[1]}
 
 sed -i '37c\ENV MAVEN_VERSION='"$MAVEN_VERSION"'' Dockerfile.template
 sed -i '44c\ENV GRADLE_VERSION='"$GRADLE_VERSION"'' Dockerfile.template
