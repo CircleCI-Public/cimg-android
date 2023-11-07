@@ -36,7 +36,7 @@ readarray -t $PLATFORMS_ARRAY <<< "$PLATFORMS"
 
 sed -i '37c\ENV MAVEN_VERSION='"$MAVEN_VERSION"'' Dockerfile.template
 sed -i '44c\ENV GRADLE_VERSION='"$GRADLE_VERSION"'' Dockerfile.template
-sed -i '62c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${BUILD_TOOLS_ARRAY[0]}"' && \\' Dockerfile.template
+sed '62c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${BUILD_TOOLS_ARRAY[0]}"' && \\' Dockerfile.template > Dockerfile.template
 sed -i '63c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${BUILD_TOOLS_ARRAY[1]}"' && \\' Dockerfile.template 
 sed -i '64c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${BUILD_TOOLS_ARRAY[2]}"' && \\' Dockerfile.template
 sed -i '66c\RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${PLATFORMS_ARRAY[0]}"' && \\' Dockerfile.template
@@ -59,7 +59,7 @@ branchName="release-v$RELEASE"
 git checkout -f -b "v${RELEASE}" "${defaultBranch}"
 shared/gen-dockerfiles.sh "$RELEASE"
 git add .
-git commit -m "Publish v$RELEASE. [release]"
+git commit -f -m "Publish v$RELEASE. [release]"
 git push -u origin "${branchName}"
 gh pr create --title "Publish v$RELEASE. [release]" --head "$branchName" --body "Publish v$RELEASE. [release]"
 
