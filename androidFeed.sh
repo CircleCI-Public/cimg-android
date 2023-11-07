@@ -54,11 +54,11 @@ sed -i '72c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[6]}
 sed -i '78c\    sudo gem install fastlane --version '"$FASTLANE_VERSION"' --no-document && \\' Dockerfile.template
 sed -i '83c\ENV GCLOUD_VERSION='"$GCLOUD_VERSION"'-0' Dockerfile.template
 
-CMAKE_VERS=$(sdkmanager --list | grep cmake | cut -d'|' -f1 | sort -Vr | head -2)
+CMAKE_VERS=$(sdkmanager --list | grep cmake | cut -d'|' -f1 | sort -Vr | tr -d '[:blank:]' | head -2)
 
 readarray -t CMAKE_ARRAY <<< "$CMAKE_VERS"
 
-NDK_VERS=$(sdkmanager --list | grep ndk | cut -d'|' -f1 | sort -Vr | head -2)
+NDK_VERS=$(sdkmanager --list | grep ndk | cut -d'|' -f1 | sort -Vr | tr -d '[:blank:]' | head -2)
 
 readarray -t NDK_ARRAY <<< "$NDK_VERS"
 echo ${NDK_ARRAY[1]}
