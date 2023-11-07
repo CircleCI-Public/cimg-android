@@ -22,7 +22,7 @@ sdkmanager --update
 GCLOUD_VERSION=$(gcloud version | head -1 | sed 's/[^0-9.]//g')
 echo "Gcloud version: "$GCLOUD_VERSION
 
-GRADLE_VERSION=$(curl --silent "https://api.github.com/repos/gradle/gradle/releases/latest" | jq -r .tag_name | sed 's/^[^0-9]*//')
+GRADLE_VERSION=$(curl --silent "https://api.github.com/repos/gradle/gradle/releases/latest" | jq -r .name | sed 's/^[^0-9]*//')
 echo "Gradle version: "$GRADLE_VERSION
 
 MAVEN_VERSION=$(curl --silent "https://api.github.com/repos/apache/maven/releases/latest" | jq -r .tag_name | sed 's/^[^0-9]*//')
