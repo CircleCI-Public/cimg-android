@@ -54,6 +54,20 @@ sed -i '72c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[6]}
 sed -i '78c\    sudo gem install fastlane --version '"$FASTLANE_VERSION"' --no-document && \\' Dockerfile.template
 sed -i '83c\ENV GCLOUD_VERSION='"$GCLOUD_VERSION"'-0' Dockerfile.template
 
+CMAKE_VERS=$(sdkmanager --list | grep cmake | cut -d'|' -f1 | sort -Vr | head -2)
+
+readarray -t CMAKE_ARRAY <<< "$CMAKE_VERS"
+
+NDK_VERS=$(sdkmanager --list | grep ndk | cut -d'|' -f1 | sort -Vr | head -2)
+
+readarray -t NDK_ARRAY <<< "$NDK_VERS"
+
+sed -i '7c\RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'${CMAKE_ARRAY[0]}'" && \' variants/ndk.Dockerfile.template
+sed -i '8c\	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'${CMAKE_ARRAY[1]}'"' variants/ndk.Dockerfile.template
+sed -i '12c\ENV NDK_LTS_VERSION "'${NDK_ARRAY[0]}'"' variants/ndk.Dockerfile.template
+sed -i '20c\ENV NDK_STABLE_VERSION "'${NDK_ARRAY[1]}'"' variants/ndk.Dockerfile.template
+
+
 shared/gen-dockerfiles.sh "$RELEASE"
 git add .
 git commit -m "Publish v$RELEASE. [release]"
