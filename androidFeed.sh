@@ -1,16 +1,16 @@
 #!/bin/bash
 
-echo "Initializing submodule..."
-git submodule update --init --recursive
-cd shared || exit && \
-git checkout main
-if [ -f automated-updates.sh ]; then
-  source automated-updates.sh
-else
-  echo "Check if submodule was loaded; automated-updates.sh is missing"
-  exit 1
-fi
-cd ..
+# echo "Initializing submodule..."
+# git submodule update --init --recursive
+# cd shared || exit && \
+# git checkout main
+# if [ -f automated-updates.sh ]; then
+#   source automated-updates.sh
+# else
+#   echo "Check if submodule was loaded; automated-updates.sh is missing"
+#   exit 1
+# fi
+# cd ..
 
 sdkmanager --update
 
