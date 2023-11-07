@@ -58,7 +58,7 @@ CMAKE_VERS=$(sdkmanager --list | grep cmake | cut -d'|' -f1 | sort -Vr | tr -d '
 
 readarray -t CMAKE_ARRAY <<< "$CMAKE_VERS"
 
-NDK_VERS=$(sdkmanager --list | grep ndk | cut -d'|' -f1 | sort -Vr | tr -d '[:blank:]' | sed 's/ndk;//g' | head -2)
+NDK_VERS=$(sdkmanager --list | grep ndk | cut -d'|' -f1 | sort -Vr | sed 's/ndk;//g' | awk -F. '!seen[$1"."]++' | head -2)
 
 readarray -t NDK_ARRAY <<< "$NDK_VERS"
 echo ${NDK_ARRAY[1]}
