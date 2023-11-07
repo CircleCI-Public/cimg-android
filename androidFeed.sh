@@ -36,7 +36,12 @@ readarray -t BUILD_TOOLS_ARRAY <<< "$BUILD_TOOLS_VERSIONS"
 
 PLATFORMS=$(sdkmanager --list | grep "platforms;android" | cut -d'|' -f1 | grep -v 'Sandbox' | grep -v 'ext' | sort -t- -nk2 | tr -d '[:blank:]' | awk -F- '!seen[$NF]++' | tail -7)
 
+
+PLATFORMS=$(sdk --list | grep "platforms;android" | cut -d'|' -f1 | grep -v 'Sandbox' | grep -v 'ext' | sort -t- -nk2 | tr -d '[:blank:]' | awk -F- '!seen[$NF]++' | tail -7)
+echo $PLATFORMS "platforms list"
 readarray -t $PLATFORMS_ARRAY <<< "$PLATFORMS"
+
+echo ${PLATFORMS_ARRAY[0]}
 
 sed -i '37c\ENV MAVEN_VERSION='"$MAVEN_VERSION"'' Dockerfile.template
 sed -i '44c\ENV GRADLE_VERSION='"$GRADLE_VERSION"'' Dockerfile.template
@@ -52,7 +57,7 @@ sed -i '71c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${PLATFORMS_ARRAY[5]
 sed -i '72c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${PLATFORMS_ARRAY[6]}"' && \\' Dockerfile.template
 sed -i '73c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${PLATFORMS_ARRAY[7]}"'' Dockerfile.template
 sed -i '78c\    sudo gem install fastlane --version '"$FASTLANE_VERSION"' --no-document && \\' Dockerfile.template
-sed -i '83c\ENV GCLOUD_VERSION='"$GCLOUD_VERSION"'' Dockerfile.template
+sed -i '83c\ENV GCLOUD_VERSION='"$GCLOUD_VERSION"'-0' Dockerfile.template
 
 shared/gen-dockerfiles.sh "$RELEASE"
 git add .
