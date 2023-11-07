@@ -49,13 +49,13 @@ sed -i '58c\RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandl
 sed -i '69c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${BUILD_TOOLS_ARRAY[0]}"' && \\' Dockerfile.template
 sed -i '70c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${BUILD_TOOLS_ARRAY[1]}"' && \\' Dockerfile.template 
 sed -i '71c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${BUILD_TOOLS_ARRAY[2]}"' && \\' Dockerfile.template
-sed -i '73c\RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[0]}' && \\' Dockerfile.template
-sed -i '74c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[1]}' && \\' Dockerfile.template
-sed -i '75c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[2]}' && \\' Dockerfile.template
-sed -i '76c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[3]}' && \\' Dockerfile.template
-sed -i '77c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[4]}' && \\' Dockerfile.template
-sed -i '78c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[5]}' && \\' Dockerfile.template
-sed -i '79c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[6]}'' Dockerfile.template
+sed -i '73c\RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${PLATFORMS_ARRAY[0]}"' && \\' Dockerfile.template
+sed -i '74c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${PLATFORMS_ARRAY[1]}"' && \\' Dockerfile.template
+sed -i '75c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${PLATFORMS_ARRAY[2]}"' && \\' Dockerfile.template
+sed -i '76c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${PLATFORMS_ARRAY[3]}"' && \\' Dockerfile.template
+sed -i '77c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${PLATFORMS_ARRAY[4]}"' && \\' Dockerfile.template
+sed -i '78c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${PLATFORMS_ARRAY[5]}"' && \\' Dockerfile.template
+sed -i '79c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '"${PLATFORMS_ARRAY[6]}"'' Dockerfile.template
 sed -i '86c\    sudo gem install fastlane --version '"$FASTLANE_VERSION"' --no-document && \\' Dockerfile.template
 sed -i '81c\ENV GCLOUD_VERSION='"$GCLOUD_VERSION"'-0' Dockerfile.template
 

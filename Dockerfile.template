@@ -76,8 +76,7 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-34" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-31" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-30" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-29" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-28" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-27"
+	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-28" 
 
 # Install some useful packages
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;android;m2repository" && \
