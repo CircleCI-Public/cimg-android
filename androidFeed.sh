@@ -13,6 +13,7 @@ fi
 cd ..
 
 generateDatedTags
+RELEASE=$RELEASE.1
 
 git checkout -b "release-v$RELEASE"
 
