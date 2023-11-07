@@ -36,7 +36,7 @@ readarray -t BUILD_TOOLS_ARRAY <<< "$BUILD_TOOLS_VERSIONS"
 
 PLATFORMS=$(sdkmanager --list | grep "platforms;android" | cut -d'|' -f1 | grep -v 'Sandbox' | grep -v 'ext' | sort -t- -nk2 | tr -d '[:blank:]' | awk -F- '!seen[$NF]++' | tail -7)
 
-readarray -a $PLATFORMS_ARRAY <<< "$PLATFORMS"
+read -a $PLATFORMS_ARRAY <<< "$PLATFORMS"
 
 echo ${PLATFORMS_ARRAY[0]}
 
