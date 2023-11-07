@@ -50,7 +50,6 @@ sed -i '69c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[3]}
 sed -i '70c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[4]}' && \\' Dockerfile.template
 sed -i '71c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[5]}' && \\' Dockerfile.template
 sed -i '72c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[6]}' && \\' Dockerfile.template
-sed -i '73c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager '${PLATFORMS_ARRAY[7]}'' Dockerfile.template
 sed -i '78c\    sudo gem install fastlane --version '"$FASTLANE_VERSION"' --no-document && \\' Dockerfile.template
 sed -i '83c\ENV GCLOUD_VERSION='"$GCLOUD_VERSION"'-0' Dockerfile.template
 
