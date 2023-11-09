@@ -4,4 +4,3 @@ repository=android
 parent=base
 variants=(ndk node browsers)
 namespace=cimg
-arm64=0
