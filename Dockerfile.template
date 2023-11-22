@@ -8,7 +8,7 @@
 
 FROM cimg/%%PARENT%%:2023.10
 
-LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
+LABEL maintainer="CircleCI Execution Team <eng-execution@circleci.com>"
 
 # Java 17 is default
 RUN sudo apt-get update && sudo apt-get install -y \
