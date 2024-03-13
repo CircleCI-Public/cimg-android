@@ -66,7 +66,7 @@ workflows:
             branches:
               ignore:
                 - main
-          context: cimg-publishing
+          context: cimg-docker-image-building
       - cimg/build-and-deploy:
           name: "Deploy"
           docker-repository: android
@@ -74,10 +74,12 @@ workflows:
             branches:
               only:
                 - main
-          context: cimg-publishing
+          context:
+            - cimg-docker-image-building
+            - cimg-docker-image-publishing
   check-feed:
     when: << pipeline.parameters.cron >>
     jobs:
       - automated-wf:
           context:
-            - cimg-publishing
+            - cpe-image-bot-github-creds
