@@ -13,6 +13,7 @@ jobs:
   automated-wf:
     docker:
       - image: cimg/android:2023.11.1
+    resource_class: small
     steps:
       - checkout
       - add_ssh_keys:
@@ -58,15 +59,14 @@ workflows:
       not: << pipeline.parameters.cron >>
     jobs:
       - cimg/build-and-deploy:
-          name: "Staging"
+          name: "Test"
           docker-namespace: ccitest
           docker-repository: android
-          publish-branch: test
           filters:
             branches:
               ignore:
                 - main
-          context: cimg-publishing
+          context: cimg-docker-image-building
       - cimg/build-and-deploy:
           name: "Deploy"
           docker-repository: android
@@ -74,10 +74,12 @@ workflows:
             branches:
               only:
                 - main
-          context: cimg-publishing
+          context:
+            - cimg-docker-image-building
+            - cimg-docker-image-publishing
   check-feed:
     when: << pipeline.parameters.cron >>
     jobs:
       - automated-wf:
           context:
-            - cimg-publishing
+            - cpe-image-bot-github-creds
