@@ -21,7 +21,10 @@ workflows:
             branches:
               ignore:
                 - main
-          context: cimg-docker-image-building
+          context: 
+            - slack-notification-access-token
+            - slack-cimg-notifications
+            - cimg-docker-image-building
       - cimg/build-and-deploy:
           name: "Deploy"
           docker-repository: android
@@ -30,6 +33,8 @@ workflows:
               only:
                 - main
           context:
+            - slack-notification-access-token
+            - slack-cimg-notifications
             - cimg-docker-image-building
             - cimg-docker-image-publishing
   check-feed:
@@ -40,4 +45,6 @@ workflows:
           image: cimg/android
           tag: "2023.11.1"
           context:
+            - slack-notification-access-token
+            - slack-cimg-notifications
             - cpe-image-bot-github-creds
