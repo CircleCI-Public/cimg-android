@@ -9,7 +9,7 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "cmake;3.18.1" && \
 
 # Use the last two versions of the NDK
 # Setup LTS release
-ENV NDK_LTS_VERSION "26.1.10909125"
+ENV NDK_LTS_VERSION "26.3.11579264"
 ENV ANDROID_NDK_HOME "/home/circleci/android-sdk/ndk/${NDK_LTS_VERSION}"
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "ndk;${NDK_LTS_VERSION}"
 
