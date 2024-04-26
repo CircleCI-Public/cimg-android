@@ -1,8 +1,7 @@
 version: 2.1
 
 orbs:
-  cimg: circleci/cimg@0.6.4
-
+  cimg: circleci/cimg@0.6.5
 parameters:
   cron:
     type: boolean
@@ -21,7 +20,7 @@ workflows:
             branches:
               ignore:
                 - main
-          context: 
+          context:
             - slack-notification-access-token
             - slack-cimg-notifications
             - cimg-docker-image-building
