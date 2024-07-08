@@ -6,7 +6,7 @@
 # specific reason to use a different one. This means January, April, July, or
 # October.
 
-FROM cimg/%%PARENT%%:2024.02
+FROM cimg/base:2024.02
 
 LABEL maintainer="CircleCI Execution Team <eng-execution@circleci.com>"
 
@@ -81,7 +81,7 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-29" && \
 # Install some useful packages
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;android;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;m2repository" && \
-	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;google_play_services" && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;google_play_services" && \
     sudo gem install fastlane --version 2.221.1 --no-document && \
 	curl -sL https://firebase.tools | bash
 
