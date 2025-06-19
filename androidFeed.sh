@@ -65,15 +65,15 @@ CMAKE_VERS=$(sdkmanager --list | grep cmake | cut -d'|' -f1 | sort -Vr | tr -d '
 
 readarray -t CMAKE_ARRAY <<< "$CMAKE_VERS"
 
-NDK_VERS=$(sdkmanager --list | grep ndk | cut -d'|' -f1 | sort -Vr | tr -d '[:blank:]' | sed 's/ndk;//g' | awk -F. '!seen[$1"."]++' | head -2)
+NDK_VERS=$(sdkmanager --list | grep ndk | grep -v 'rc[[:digit:]]' | cut -d'|' -f1 | sort -Vr | tr -d '[:blank:]' | sed 's/ndk;//g' | awk -F. '!seen[$1"."]++' | head -2)
 
 readarray -t NDK_ARRAY <<< "$NDK_VERS"
 echo ${NDK_ARRAY[1]}
 
 sed -i '7c\RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${CMAKE_ARRAY[1]}"'" && \\' variants/ndk.Dockerfile.template
 sed -i '8c\	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${CMAKE_ARRAY[0]}"'"' variants/ndk.Dockerfile.template
-sed -i '12c\ENV NDK_LTS_VERSION "'"${NDK_ARRAY[0]}"'"' variants/ndk.Dockerfile.template
-sed -i '20c\ENV NDK_STABLE_VERSION "'"${NDK_ARRAY[1]}"'"' variants/ndk.Dockerfile.template
+sed -i '12c\ENV NDK_LTS_VERSION "'"${NDK_ARRAY[1]}"'"' variants/ndk.Dockerfile.template
+sed -i '20c\ENV NDK_STABLE_VERSION "'"${NDK_ARRAY[0]}"'"' variants/ndk.Dockerfile.template
 
 
 shared/gen-dockerfiles.sh "$RELEASE"
