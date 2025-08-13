@@ -26,9 +26,9 @@ RUN sudo apt-get update && sudo apt-get install -y \
 #fixes issue with bundle install highlighted in https://github.com/CircleCI-Public/cimg-android/issues/82
 RUN sudo chmod -R a+w /var/lib/gems/ /usr/local/bin
 
-ENV M2_HOME /usr/local/apache-maven
-ENV MAVEN_OPTS -Xmx2048m
-ENV PATH $M2_HOME/bin:$PATH
+ENV M2_HOME=/usr/local/apache-maven
+ENV MAVEN_OPTS=-Xmx2048m
+ENV PATH=$M2_HOME/bin:$PATH
 # Set JAVA_HOME (and related) environment variable. This will be set to our
 # default Java version of 21 but the user would need to reset it when changing
 # JAVA versions.
@@ -44,6 +44,7 @@ RUN dl_URL="https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apa
 	sudo ln -s /opt/apache-maven-* /opt/apache-maven && \
 	mvn --version && \
 	mkdir -p /home/circleci/.m2
+
 ENV GRADLE_VERSION=8.13
 ENV PATH $PATH:/usr/local/gradle-${GRADLE_VERSION}/bin
 RUN URL=https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip && \
@@ -52,11 +53,11 @@ RUN URL=https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.z
 	rm -rf /tmp/gradle.zip
 
 # Install Android SDK Tools
-ENV ANDROID_HOME "/home/circleci/android-sdk"
-ENV ANDROID_SDK_ROOT $ANDROID_HOME
-ENV CMDLINE_TOOLS_ROOT "${ANDROID_HOME}/cmdline-tools/latest/bin"
-ENV ADB_INSTALL_TIMEOUT 120
-ENV PATH "${ANDROID_HOME}/emulator:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/platform-tools/bin:${PATH}"
+ENV ANDROID_HOME="/home/circleci/android-sdk"
+ENV ANDROID_SDK_ROOT=$ANDROID_HOME
+ENV CMDLINE_TOOLS_ROOT="${ANDROID_HOME}/cmdline-tools/latest/bin"
+ENV ADB_INSTALL_TIMEOUT=120
+ENV PATH="${ANDROID_HOME}/emulator:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/platform-tools/bin:${PATH}"
 # You can find the latest command line tools here: https://developer.android.com/studio#command-line-tools-only
 RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip" && \
 	mkdir -p ${ANDROID_HOME}/cmdline-tools && \
