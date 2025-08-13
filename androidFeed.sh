@@ -46,20 +46,20 @@ PLATFORMS=$(sdkmanager --list | grep "platforms;android" | cut -d'|' -f1 | grep 
 readarray -t PLATFORMS_ARRAY <<< "$PLATFORMS"
 
 sed -i '38c\ENV MAVEN_VERSION='"$MAVEN_VERSION"'' Dockerfile.template
-sed -i '44c\ENV GRADLE_VERSION='"$GRADLE_VERSION"'' Dockerfile.template
-sed -i '58c\RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-'"$CLT_VERSION"'_latest.zip" && \\' Dockerfile.template
-sed -i '69c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[0]}"'" && \\' Dockerfile.template
-sed -i '70c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[1]}"'" && \\' Dockerfile.template
-sed -i '71c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[2]}"'"' Dockerfile.template
-sed -i '72c\RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[0]}"'" && \\' Dockerfile.template
-sed -i '73c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[1]}"'" && \\' Dockerfile.template
-sed -i '74c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[2]}"'" && \\' Dockerfile.template
-sed -i '75c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[3]}"'" && \\' Dockerfile.template
-sed -i '76c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[4]}"'" && \\' Dockerfile.template
-sed -i '77c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[5]}"'" && \\' Dockerfile.template
-sed -i '78c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[6]}"'"' Dockerfile.template
-sed -i '84c\    sudo gem install fastlane --version '"$FASTLANE_VERSION"' --no-document && \\' Dockerfile.template
-sed -i '89c\ENV GCLOUD_VERSION='"$GCLOUD_VERSION"'-0' Dockerfile.template
+sed -i '48c\ENV GRADLE_VERSION='"$GRADLE_VERSION"'' Dockerfile.template
+sed -i '62c\RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-'"$CLT_VERSION"'_latest.zip" && \\' Dockerfile.template
+sed -i '73c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[0]}"'" && \\' Dockerfile.template
+sed -i '74c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[1]}"'" && \\' Dockerfile.template
+sed -i '75c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[2]}"'"' Dockerfile.template
+sed -i '76c\RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[0]}"'" && \\' Dockerfile.template
+sed -i '77c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[1]}"'" && \\' Dockerfile.template
+sed -i '78c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[2]}"'" && \\' Dockerfile.template
+sed -i '79c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[3]}"'" && \\' Dockerfile.template
+sed -i '80c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[4]}"'" && \\' Dockerfile.template
+sed -i '81c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[5]}"'" && \\' Dockerfile.template
+sed -i '82c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[6]}"'"' Dockerfile.template
+sed -i '88c\    sudo gem install fastlane --version '"$FASTLANE_VERSION"' --no-document && \\' Dockerfile.template
+sed -i '93c\ENV GCLOUD_VERSION='"$GCLOUD_VERSION"'-0' Dockerfile.template
 
 CMAKE_VERS=$(sdkmanager --list | grep cmake | cut -d'|' -f1 | sort -Vr | tr -d '[:blank:]' | head -2)
 
