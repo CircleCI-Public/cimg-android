@@ -6,7 +6,7 @@
 # specific reason to use a different one. This means January, April, July, or
 # October.
 
-FROM cimg/%%PARENT%%:2026.03
+FROM cimg/base:2025.09
 
 LABEL maintainer="CircleCI Execution Team <eng-execution@circleci.com>"
 
@@ -45,8 +45,8 @@ RUN dl_URL="https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apa
 	mvn --version && \
 	mkdir -p /home/circleci/.m2
 
-ENV GRADLE_VERSION=9.4.0
-ENV PATH=$PATH:/usr/local/gradle-${GRADLE_VERSION}/bin
+ENV GRADLE_VERSION=9.3.1
+ENV PATH $PATH:/usr/local/gradle-${GRADLE_VERSION}/bin
 RUN URL=https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip && \
 	curl -sSL -o /tmp/gradle.zip $URL && \
 	sudo unzip -d /usr/local /tmp/gradle.zip && \
@@ -70,10 +70,9 @@ RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-lin
 
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "tools" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platform-tools" && \
-    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;36.1.0" && \
-    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;36.0.0" && \
-    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;35.0.0" && \
-    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;34.0.0"
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;36.1.0-rc1" && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;35.0.1" && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;34.0.0-rc3"
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-31" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-32" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-33" && \
@@ -86,7 +85,7 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-31" && \
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;android;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;google_play_services" && \
-    sudo gem install fastlane --version 2.232.2 --no-document && \
+    sudo gem install fastlane --version 2.231.1 --no-document && \
 	curl -sL https://firebase.tools | bash
 
 # Install Google Cloud CLI
