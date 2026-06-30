@@ -37,10 +37,13 @@ echo "Maven version: $MAVEN_VERSION"
 FASTLANE_VERSION=$(curl --silent "https://api.github.com/repos/fastlane/fastlane/releases/latest" | jq -r .tag_name)
 echo "Fastlane version: $FASTLANE_VERSION"
 
-NON_RC_BT=$(sdkmanager --list | grep "build-tools" | awk -F';' '{print $2}' | awk -F'|' '{print $1}' | tr -d '[:blank:]' | grep -v 'rc')
-LATEST_STABLE_BT=$(echo "$NON_RC_BT" | sort -Vr | head -1)
-BASE_RELEASES_BT=$(echo "$NON_RC_BT" | grep '\.0\.0$' | sort -Vr | head -3)
-BUILD_TOOLS_VERSIONS=$(printf '%s\n%s' "$LATEST_STABLE_BT" "$BASE_RELEASES_BT" | sort -Vr | uniq | head -n 4)
+# Unique stable Build Tools versions sorted in the descending order
+NON_RC_BT=$(sdkmanager --list | grep "build-tools" | awk -F';' '{print $2}' | awk -F'|' '{print $1}' | tr -d '[:blank:]' | grep -v 'rc' | sort -Vru )
+LATEST_STABLE_BT=$(echo "$NON_RC_BT" | head -1)
+# Skipping the latest stable, as it can result in a duplicate
+BASE_RELEASES_BT=$(echo "$NON_RC_BT" | tail -n +2 | grep '\.0$' | head -3)
+# 1 latest stable + 3 base releases = 4 unique versions
+BUILD_TOOLS_VERSIONS=$(printf '%s\n%s' "$LATEST_STABLE_BT" "$BASE_RELEASES_BT" )
 
 readarray -t BUILD_TOOLS_ARRAY <<< "$BUILD_TOOLS_VERSIONS"
 
