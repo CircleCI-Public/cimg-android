@@ -14,7 +14,7 @@ workflows:
     jobs:
       - cimg/build-and-deploy:
           name: "Test"
-          resource-class: medium.gen2
+          resource-class: medium.gen3
           docker-namespace: ccitest
           docker-repository: android
           filters:
@@ -27,7 +27,7 @@ workflows:
             - cimg-docker-image-building
       - cimg/build-and-deploy:
           name: "Deploy"
-          resource-class: medium.gen2
+          resource-class: medium.gen3
           docker-repository: android
           filters:
             branches:
@@ -42,7 +42,7 @@ workflows:
     when: << pipeline.parameters.cron >>
     jobs:
       - cimg/update:
-          resource-class: small.gen2
+          resource-class: small.gen3
           update-script: androidFeed.sh
           image: cimg/android
           tag: "2026.03.1"
