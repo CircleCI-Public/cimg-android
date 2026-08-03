@@ -35,7 +35,7 @@ ENV PATH=$M2_HOME/bin:$PATH
 ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 ENV JDK_HOME=${JAVA_HOME}
 ENV JRE_HOME=${JDK_HOME}
-ENV MAVEN_VERSION=3.10.0-rc-1
+ENV MAVEN_VERSION=3.9.16
 ENV PATH=/opt/apache-maven/bin:$PATH
 RUN dl_URL="https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" && \
 	curl -sSL --fail --retry 3 $dl_URL -o apache-maven.tar.gz && \
