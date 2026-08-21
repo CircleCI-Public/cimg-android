@@ -4,3 +4,7 @@ repository=android
 parent=base
 variants=(ndk node browsers)
 namespace=cimg
+arm64=1
+# NDK ships only toolchains/llvm/prebuilt/linux-x86_64; Chrome has no
+# arm64 Linux build. Both variants stay amd64-only.
+amd64_only_variants=(browsers ndk)

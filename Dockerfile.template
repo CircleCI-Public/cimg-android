@@ -6,7 +6,19 @@
 # specific reason to use a different one. This means January, April, July, or
 # October.
 
+# Cross-compiled linux-aarch64 build-tools (aapt2, aidl, zipalign,
+# split-select). Google publishes none of these for linux-aarch64, so they
+# have to be built from AOSP source -- see the PR description for the
+# recipe. This image does not exist yet; it needs to be produced and
+# published by CircleCI CI so the binaries carry CircleCI's provenance
+# rather than a third party's. Until then this build cannot succeed, which
+# is why this PR is a draft.
+ARG ARM64_TOOLS_IMAGE=cimg/android-arm64-tools:latest
+FROM ${ARM64_TOOLS_IMAGE} AS arm64tools
+
 FROM cimg/%%PARENT%%:2026.08
+
+ARG TARGETARCH
 
 LABEL maintainer="CircleCI Execution Team <eng-execution@circleci.com>"
 
@@ -32,7 +44,12 @@ ENV PATH=$M2_HOME/bin:$PATH
 # Set JAVA_HOME (and related) environment variable. This will be set to our
 # default Java version of 21 but the user would need to reset it when changing
 # JAVA versions.
-ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+# Debian arch-suffixes these paths (-amd64 / -arm64); symlink to a stable
+# name so JAVA_HOME is identical on both architectures.
+RUN for v in 8 17 21; do \
+		sudo ln -s "/usr/lib/jvm/java-${v}-openjdk-${TARGETARCH}" "/usr/lib/jvm/java-${v}-openjdk"; \
+	done
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk
 ENV JDK_HOME=${JAVA_HOME}
 ENV JRE_HOME=${JDK_HOME}
 ENV MAVEN_VERSION=3.9.16
@@ -68,7 +85,11 @@ RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-lin
 	rm /tmp/cmdline-tools.zip && \
 	mv ${ANDROID_HOME}/cmdline-tools/cmdline-tools ${ANDROID_HOME}/cmdline-tools/latest
 
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "tools" && \
+# The "tools" package depends on "emulator", which Google publishes for
+# linux-x86_64 only; on arm64 sdkmanager warns and skips the dependency.
+RUN if [ "${TARGETARCH}" = "amd64" ]; then \
+        echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "tools"; \
+    fi && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platform-tools" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;37.0.0" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;36.1.0" && \
@@ -82,12 +103,47 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-34" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-37.1" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-37.2-beta1"
 
+# --- arm64 native-binary fixups ------------------------------------------
+# build-tools/platform-tools carry no host-arch constraint, so sdkmanager
+# installs the x86-64 binaries on arm64 too, where none of them can exec.
+COPY --from=arm64tools /out/ /tmp/arm64tools/
+RUN if [ "${TARGETARCH}" = "arm64" ]; then \
+        set -eux; \
+        for bt in ${ANDROID_HOME}/build-tools/*/; do \
+            for f in aapt2 aidl zipalign split-select; do \
+                sudo install -m0755 "/tmp/arm64tools/${f}" "${bt}${f}"; \
+            done; \
+        done; \
+        sudo apt-get update && sudo apt-get install -y --no-install-recommends adb fastboot && \
+        sudo rm -rf /var/lib/apt/lists/*; \
+        sudo ln -sf "$(command -v adb)" "${ANDROID_HOME}/platform-tools/adb"; \
+        sudo ln -sf "$(command -v fastboot)" "${ANDROID_HOME}/platform-tools/fastboot"; \
+        mkdir -p /home/circleci/.gradle; \
+        echo "android.aapt2FromMavenOverride=${ANDROID_HOME}/build-tools/36.1.0/aapt2" \
+            >> /home/circleci/.gradle/gradle.properties; \
+    fi; \
+    sudo rm -rf /tmp/arm64tools
+
+# Self-check: actually execute the toolchain. buildx builds arm64 layers
+# under qemu, so an x86-64 binary in an arm64 rootfs fails here (exit 127)
+# and breaks the build. This is the assertion #173 lacked -- CI proved the
+# image built, never that it ran.
+RUN set -eux; \
+    aapt2 version; \
+    zipalign 2>&1 | head -1; \
+    adb --version; \
+    java -version
+# --------------------------------------------------------------------------
+
 # Install some useful packages
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;android;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;google_play_services" && \
     sudo gem install fastlane --version 2.237.0 --no-document && \
-	curl -sL https://firebase.tools | bash
+	# firebase.tools serves a single x86-64 binary for linux and cimg/base
+	# carries no npm, so the CLI is amd64-only here. On arm64, install it
+	# yourself with `npm i -g firebase-tools` (the -node variant has npm).
+	if [ "${TARGETARCH}" = "amd64" ]; then curl -sL https://firebase.tools | bash; fi
 
 # Install Google Cloud CLI
 # Latest gcloud version can be found here: https://cloud.google.com/sdk/docs/release-notes
