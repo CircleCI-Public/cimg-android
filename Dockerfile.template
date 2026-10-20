@@ -10,12 +10,12 @@ FROM cimg/%%PARENT%%:2026.08
 
 LABEL maintainer="CircleCI Execution Team <eng-execution@circleci.com>"
 
-# Java 17 is default
 RUN sudo apt-get update && sudo apt-get install -y \
 		ant \
 		openjdk-8-jdk \
 		openjdk-17-jdk \
 		openjdk-21-jdk \
+		openjdk-25-jdk \
 		ruby-full \
 	&& \
 	sudo rm -rf /var/lib/apt/lists/* && \
@@ -23,18 +23,18 @@ RUN sudo apt-get update && sudo apt-get install -y \
 	sudo gem install bundler && \
 	bundle version
 
+# Set default Java, JAVA_HOME, and related environment variable.
+RUN sudo update-java-alternatives -s java-1.21.0-openjdk-arm64
+ENV JAVA_HOME=/usr/lib/jvm/java-1.21.0-openjdk-arm64
+ENV JDK_HOME=${JAVA_HOME}
+ENV JRE_HOME=${JAVA_HOME}
+
 #fixes issue with bundle install highlighted in https://github.com/CircleCI-Public/cimg-android/issues/82
 RUN sudo chmod -R a+w /var/lib/gems/ /usr/local/bin
 
 ENV M2_HOME=/usr/local/apache-maven
 ENV MAVEN_OPTS=-Xmx2048m
 ENV PATH=$M2_HOME/bin:$PATH
-# Set JAVA_HOME (and related) environment variable. This will be set to our
-# default Java version of 21 but the user would need to reset it when changing
-# JAVA versions.
-ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
-ENV JDK_HOME=${JAVA_HOME}
-ENV JRE_HOME=${JDK_HOME}
 ENV MAVEN_VERSION=3.9.16
 ENV PATH=/opt/apache-maven/bin:$PATH
 RUN dl_URL="https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" && \
