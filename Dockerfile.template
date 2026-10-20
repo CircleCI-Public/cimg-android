@@ -35,7 +35,7 @@ RUN sudo chmod -R a+w /var/lib/gems/ /usr/local/bin
 ENV M2_HOME=/usr/local/apache-maven
 ENV MAVEN_OPTS=-Xmx2048m
 ENV PATH=$M2_HOME/bin:$PATH
-ENV MAVEN_VERSION=3.9.16
+ENV MAVEN_VERSION=3.10.0
 ENV PATH=/opt/apache-maven/bin:$PATH
 RUN dl_URL="https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" && \
 	curl -sSL --fail --retry 3 $dl_URL -o apache-maven.tar.gz && \
@@ -45,7 +45,7 @@ RUN dl_URL="https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apa
 	mvn --version && \
 	mkdir -p /home/circleci/.m2
 
-ENV GRADLE_VERSION=9.6.1
+ENV GRADLE_VERSION=9.8.2
 ENV PATH=$PATH:/usr/local/gradle-${GRADLE_VERSION}/bin
 RUN URL=https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip && \
 	curl -sSL -o /tmp/gradle.zip $URL && \
@@ -74,19 +74,19 @@ RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "tools" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;36.1.0" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;36.0.0" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;35.0.0"
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-34" && \
-    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-35" && \
-    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-36" && \
-    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-36.1" && \
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-36.1" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-37.0" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-37.1" && \
-    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-37.2-beta1"
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-37.2" && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-37.2-beta1" && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-37.2-beta2" && \
+    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platforms;android-37.2-beta3"
 
 # Install some useful packages
 RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;android;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;m2repository" && \
 	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "extras;google;google_play_services" && \
-    sudo gem install fastlane --version 2.237.0 --no-document && \
+    sudo gem install fastlane --version 2.241.1 --no-document && \
 	curl -sL https://firebase.tools | bash
 
 # Install Google Cloud CLI
