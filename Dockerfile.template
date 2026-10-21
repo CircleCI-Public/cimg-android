@@ -6,7 +6,7 @@
 # specific reason to use a different one. This means January, April, July, or
 # October.
 
-FROM cimg/%%PARENT%%:2026.08
+FROM cimg/%%PARENT%%:2026.10
 
 LABEL maintainer="CircleCI Execution Team <eng-execution@circleci.com>"
 
@@ -24,8 +24,8 @@ RUN sudo apt-get update && sudo apt-get install -y \
 	bundle version
 
 # Set default Java, JAVA_HOME, and related environment variable.
-RUN sudo update-java-alternatives -s java-1.21.0-openjdk-arm64
-ENV JAVA_HOME=/usr/lib/jvm/java-1.21.0-openjdk-arm64
+RUN sudo update-java-alternatives -s java-1.21.0-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-1.21.0-openjdk-amd64
 ENV JDK_HOME=${JAVA_HOME}
 ENV JRE_HOME=${JAVA_HOME}
 
