@@ -68,8 +68,7 @@ RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-lin
 	rm /tmp/cmdline-tools.zip && \
 	mv ${ANDROID_HOME}/cmdline-tools/cmdline-tools ${ANDROID_HOME}/cmdline-tools/latest
 
-RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "tools" && \
-    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platform-tools" && \
+RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "platform-tools" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;37.0.0" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;36.1.0" && \
     echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;36.0.0" && \
