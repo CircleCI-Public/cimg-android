@@ -47,26 +47,32 @@ BUILD_TOOLS_VERSIONS=$(printf '%s\n%s' "$LATEST_STABLE_BT" "$BASE_RELEASES_BT" )
 
 readarray -t BUILD_TOOLS_ARRAY <<< "$BUILD_TOOLS_VERSIONS"
 
-PLATFORMS=$(sdkmanager --list | grep "platforms;android" | cut -d'|' -f1 | grep -v 'Sandbox' | grep -v 'ext' | sort -t- -nk2 | tr -d '[:blank:]' | awk -F- '!seen[$NF]++' | tail -7)
+PLATFORMS=$(sdkmanager --list | grep "platforms;android" | cut -d'|' -f1 | grep -v 'Sandbox' | grep -v 'ext' | grep -vi 'beta\|canary' | sort -t- -nk2 | tr -d '[:blank:]' | awk -F- '!seen[$NF]++' | tail -7)
 
 readarray -t PLATFORMS_ARRAY <<< "$PLATFORMS"
 
-sed -i '38c\ENV MAVEN_VERSION='"$MAVEN_VERSION"'' Dockerfile.template
-sed -i '48c\ENV GRADLE_VERSION='"$GRADLE_VERSION"'' Dockerfile.template
-sed -i '62c\RUN SDK_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-'"$CLT_VERSION"'_latest.zip" && \\' Dockerfile.template
-sed -i '73c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[0]}"'" && \\' Dockerfile.template
-sed -i '74c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[1]}"'" && \\' Dockerfile.template
-sed -i '75c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[2]}"'" && \\' Dockerfile.template
-sed -i '76c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[3]}"'"' Dockerfile.template
-sed -i '77c\RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[0]}"'" && \\' Dockerfile.template
-sed -i '78c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[1]}"'" && \\' Dockerfile.template
-sed -i '79c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[2]}"'" && \\' Dockerfile.template
-sed -i '80c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[3]}"'" && \\' Dockerfile.template
-sed -i '81c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[4]}"'" && \\' Dockerfile.template
-sed -i '82c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[5]}"'" && \\' Dockerfile.template
-sed -i '83c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[6]}"'"' Dockerfile.template
-sed -i '89c\    sudo gem install fastlane --version '"$FASTLANE_VERSION"' --no-document && \\' Dockerfile.template
-sed -i '94c\ENV GCLOUD_VERSION='"$GCLOUD_VERSION"'-0' Dockerfile.template
+# Match on line content rather than fixed line numbers so template edits don't misplace updates
+sed -i 's/^ENV MAVEN_VERSION=.*/ENV MAVEN_VERSION='"$MAVEN_VERSION"'/' Dockerfile.template
+sed -i 's/^ENV GRADLE_VERSION=.*/ENV GRADLE_VERSION='"$GRADLE_VERSION"'/' Dockerfile.template
+sed -i 's/commandlinetools-linux-[0-9]*_latest\.zip/commandlinetools-linux-'"$CLT_VERSION"'_latest.zip/' Dockerfile.template
+sed -i 's/gem install fastlane --version [^ ]*/gem install fastlane --version '"$FASTLANE_VERSION"'/' Dockerfile.template
+sed -i 's/^ENV GCLOUD_VERSION=.*/ENV GCLOUD_VERSION='"$GCLOUD_VERSION"'-0/' Dockerfile.template
+
+# Build tools and platforms are multi-line blocks, so locate the first line of each block
+BT_LINE=$(grep -n 'sdkmanager "build-tools;' Dockerfile.template | head -1 | cut -d: -f1)
+PLATFORMS_LINE=$(grep -n 'sdkmanager "platforms;' Dockerfile.template | head -1 | cut -d: -f1)
+
+sed -i "$((BT_LINE))"'c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[0]}"'" && \\' Dockerfile.template
+sed -i "$((BT_LINE + 1))"'c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[1]}"'" && \\' Dockerfile.template
+sed -i "$((BT_LINE + 2))"'c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[2]}"'" && \\' Dockerfile.template
+sed -i "$((BT_LINE + 3))"'c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "build-tools;'"${BUILD_TOOLS_ARRAY[3]}"'"' Dockerfile.template
+sed -i "$((PLATFORMS_LINE))"'c\RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[0]}"'" && \\' Dockerfile.template
+sed -i "$((PLATFORMS_LINE + 1))"'c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[1]}"'" && \\' Dockerfile.template
+sed -i "$((PLATFORMS_LINE + 2))"'c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[2]}"'" && \\' Dockerfile.template
+sed -i "$((PLATFORMS_LINE + 3))"'c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[3]}"'" && \\' Dockerfile.template
+sed -i "$((PLATFORMS_LINE + 4))"'c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[4]}"'" && \\' Dockerfile.template
+sed -i "$((PLATFORMS_LINE + 5))"'c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[5]}"'" && \\' Dockerfile.template
+sed -i "$((PLATFORMS_LINE + 6))"'c\    echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${PLATFORMS_ARRAY[6]}"'"' Dockerfile.template
 
 CMAKE_VERS=$(sdkmanager --list | grep cmake | cut -d'|' -f1 | sort -Vr | tr -d '[:blank:]' | head -2)
 
@@ -77,10 +83,12 @@ NDK_VERS=$(sdkmanager --list | grep ndk | grep -v 'rc[[:digit:]]' | cut -d'|' -f
 readarray -t NDK_ARRAY <<< "$NDK_VERS"
 echo ${NDK_ARRAY[1]}
 
-sed -i '7c\RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${CMAKE_ARRAY[1]}"'" && \\' variants/ndk.Dockerfile.template
-sed -i '8c\	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${CMAKE_ARRAY[0]}"'"' variants/ndk.Dockerfile.template
-sed -i '12c\ENV NDK_LTS_VERSION "'"${NDK_ARRAY[1]}"'"' variants/ndk.Dockerfile.template
-sed -i '20c\ENV NDK_STABLE_VERSION "'"${NDK_ARRAY[0]}"'"' variants/ndk.Dockerfile.template
+CMAKE_LINE=$(grep -n 'sdkmanager "cmake;' variants/ndk.Dockerfile.template | head -1 | cut -d: -f1)
+
+sed -i "$((CMAKE_LINE))"'c\RUN echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${CMAKE_ARRAY[1]}"'" && \\' variants/ndk.Dockerfile.template
+sed -i "$((CMAKE_LINE + 1))"'c\	echo y | ${CMDLINE_TOOLS_ROOT}/sdkmanager "'"${CMAKE_ARRAY[0]}"'"' variants/ndk.Dockerfile.template
+sed -i 's/^ENV NDK_LTS_VERSION .*/ENV NDK_LTS_VERSION "'"${NDK_ARRAY[1]}"'"/' variants/ndk.Dockerfile.template
+sed -i 's/^ENV NDK_STABLE_VERSION .*/ENV NDK_STABLE_VERSION "'"${NDK_ARRAY[0]}"'"/' variants/ndk.Dockerfile.template
 
 
 shared/gen-dockerfiles.sh "$RELEASE"
