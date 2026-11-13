@@ -22,10 +22,16 @@ sdkmanager --update
 CLT_VERSION=$(curl -s https://developer.android.com/studio#command-line-tools-only | grep "commandlinetools-linux" | grep -o '[0-9]\+'| tr -d '[:blank:]' | head -1)
 echo "Command Line Tools version: $CLT_VERSION"
 
-# keep on top of the latest gcloud CLI updates rather than relying on the in-use tag for the build
-gcloud components update --quiet
-
-GCLOUD_VERSION=$(gcloud version | head -1 | sed 's/[^0-9.]//g')
+# Read the latest google-cloud-cli version from Google's apt index rather than the gcloud
+# installed in this job's image: apt installs disable `gcloud components update`, so the
+# local version is stale and may since have been removed from the apt repo.
+GCLOUD_VERSION=$(curl -fsSL https://packages.cloud.google.com/apt/dists/cloud-sdk/main/binary-amd64/Packages \
+  | awk '/^Package: google-cloud-cli$/{p=1;next} /^Package:/{p=0} p&&/^Version:/{print $2}' \
+  | sort -V | tail -1 | sed 's/-0$//')
+if [ -z "$GCLOUD_VERSION" ]; then
+  echo "Failed to determine latest google-cloud-cli version from apt index"
+  exit 1
+fi
 echo "Gcloud version: $GCLOUD_VERSION"
 
 GRADLE_VERSION=$(curl --silent "https://api.github.com/repos/gradle/gradle/releases/latest" | jq -r .name | sed 's/^[^0-9]*//')
