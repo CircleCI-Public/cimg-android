@@ -44,7 +44,7 @@ workflows:
       - cimg/update:
           update-script: androidFeed.sh
           image: cimg/android
-          tag: "2026.03.1"
+          tag: "2026.10.1"
           context:
             - slack-notification-access-token
             - slack-cimg-notifications
