@@ -28,11 +28,6 @@ RUN sudo update-java-alternatives -s java-1.21.0-openjdk-amd64
 ENV JAVA_HOME=/usr/lib/jvm/java-1.21.0-openjdk-amd64
 ENV JDK_HOME=${JAVA_HOME}
 ENV JRE_HOME=${JAVA_HOME}
-# Interim mitigation for CVE-2026-114938 (Java4Shell): disable the x86-64 Base64
-# intrinsic until Ubuntu ships fixed openjdk-17/21/25 packages. JDK_JAVA_OPTIONS
-# (not JAVA_TOOL_OPTIONS) because only the JDK 9+ java launcher reads it: JDK 8 is
-# not affected and would refuse to start with this flag. Remove once apt is fixed.
-ENV JDK_JAVA_OPTIONS="-XX:-UseBASE64Intrinsics"
 
 #fixes issue with bundle install highlighted in https://github.com/CircleCI-Public/cimg-android/issues/82
 RUN sudo chmod -R a+w /var/lib/gems/ /usr/local/bin
