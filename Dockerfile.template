@@ -45,12 +45,28 @@ RUN dl_URL="https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apa
 	mvn --version && \
 	mkdir -p /home/circleci/.m2
 
+# Pre-seed recent Gradle wrapper distributions and add the latest to the global path.
+# The following versions are installed:
+# - All patch versions for the latest major+minor version.
+# - Latest patch version for the previous two minor versions.
+# - Latest patch version for the previous major version.
 ENV GRADLE_VERSION=9.8.2
-ENV PATH=$PATH:/usr/local/gradle-${GRADLE_VERSION}/bin
-RUN URL=https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip && \
-	curl -sSL -o /tmp/gradle.zip $URL && \
-	sudo unzip -d /usr/local /tmp/gradle.zip && \
-	rm -rf /tmp/gradle.zip
+ENV PATH=$PATH:/home/circleci/.gradle/wrapper/dists/gradle-${GRADLE_VERSION}-bin/8wepis63pzuhrlfaiy04bagwu/gradle-${GRADLE_VERSION}/bin
+RUN mkdir -p /home/circleci/.gradle/wrapper/dists && \
+	cd $_ && \
+	mkdir -p gradle-9.8.2-bin/8wepis63pzuhrlfaiy04bagwu && pushd $_ && \
+	curl -sSLO https://services.gradle.org/distributions/gradle-9.8.2-bin.zip && unzip -q * && rm *.zip && popd && \
+	mkdir -p gradle-9.8.1-bin/a2l6ltp3k1vth6lwipzm5p2jp && pushd $_ && \
+	curl -sSLO https://services.gradle.org/distributions/gradle-9.8.1-bin.zip && unzip -q * && rm *.zip && popd && \
+	mkdir -p gradle-9.8.0-bin/3m7h6ceboy5k31n8kzwzuxssm && pushd $_ && \
+	curl -sSLO https://services.gradle.org/distributions/gradle-9.8.0-bin.zip && unzip -q * && rm *.zip && popd && \
+	mkdir -p gradle-9.7.1-bin/1w1c7tv4s851m17nbqdsro2tv && pushd $_ && \
+	curl -sSLO https://services.gradle.org/distributions/gradle-9.7.1-bin.zip && unzip -q * && rm *.zip && popd && \
+	mkdir -p gradle-9.6.1-bin/4ticwg1pgcbps2hj28r8so764 && pushd $_ && \
+	curl -sSLO https://services.gradle.org/distributions/gradle-9.6.1-bin.zip && unzip -q * && rm *.zip && popd && \
+	mkdir -p gradle-8.14.6-bin/ck2u8j60r58fu0sgyxrigm3cu && pushd $_ && \
+	curl -sSLO https://services.gradle.org/distributions/gradle-8.14.6-bin.zip && unzip -q * && rm *.zip && popd && \
+	gradle -version
 
 # Install Android SDK Tools
 ENV ANDROID_HOME="/home/circleci/android-sdk"
